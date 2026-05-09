@@ -1,0 +1,43 @@
+{
+  "name": "mini-inconnu-xd-bot",
+  "version": "1.0.0",
+  "description": "WhatsApp Bot with Multi-Number Support",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@whiskeysockets/baileys": "latest",
+    "express": "latest",
+    "body-parser": "latest",
+    "axios": "latest",
+    "fs-extra": "latest",
+    "pino": "latest",
+    "jimp": "latest",
+    "form-data": "latest",
+    "canvas": "latest",
+    "@ffmpeg-installer/ffmpeg": "latest",
+    "ffmpeg": "latest",
+    "google-tts-api": "latest",
+    "wa-sticker-formatter": "latest",
+    "@octokit/rest": "latest",
+    "child_process": "latest",
+    "denethdev-ytmp3": "latest",
+    "cheerio": "latest",
+    "ruhend-scraper": "latest",
+    "yt-search": "latest",
+    "node-fetch": "2.7.0",
+    "sharp": "latest",
+    "path": "latest",
+    "fs": "latest",
+    "file-type": "16.5.4",
+    "qrcode": "latest",
+    "moment-timezone": "latest",
+    "events": "latest"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "author": "DAGMA Tech",
+  "license": "MIT"
+}
