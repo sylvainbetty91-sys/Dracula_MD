@@ -701,7 +701,7 @@ newsletterName: config.BOT_NAME,
         }
     };
 
-    const menuMessage = {
+
       const menuMessage = {
   image: { url: config.IMAGE_PATH },
   caption: `*${config.BOT_NAME}*\n${menuText}`,
