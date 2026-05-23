@@ -195,7 +195,7 @@ function getUserConfig(number) {
 
 const owner = 'sylvainbetty91-sys';
 const repo = 'Dracula';
-const octokit = new Octokit({ auth: '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' });
+const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
 let dragueSessions = {};
 
