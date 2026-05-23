@@ -790,7 +790,7 @@ newsletterName: userCfg.BOT_NAME,
         }
     };
 
-    const menuMessage = {
+
       const menuMessage = {
   image: { url: userCfg.IMAGE_PATH },
   caption: `*${userCfg.BOT_NAME}*\n${menuText}`,
