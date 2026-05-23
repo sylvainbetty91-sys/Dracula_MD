@@ -15,7 +15,7 @@
     "pino": "latest",
     "jimp": "0.22.12",
     "form-data": "latest",
-    "canvas": "2.11.2",
+    "canvas": "latest",
     "@ffmpeg-installer/ffmpeg": "latest",
     "ffmpeg": "latest",
     "google-tts-api": "latest",
