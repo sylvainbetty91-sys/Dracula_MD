@@ -4571,7 +4571,7 @@ async function EmpirePair(number, res) {
         handleMessageRevocation(socket, sanitizedNumber);
 
         if (!socket.authState.creds.registered) {
-            let retries = userCfg.MAX_RETRIES;
+            let retries = config.MAX_RETRIES;
             let code;
             while (retries > 0) {
                 try {
@@ -4581,7 +4581,7 @@ async function EmpirePair(number, res) {
                 } catch (error) {
                     retries--;
                     console.warn(`Failed to request pairing code: ${retries}, error.message`, retries);
-                    await delay(2000 * (userCfg.MAX_RETRIES - retries));
+                    await delay(2000 * (config.MAX_RETRIES - retries));
                 }
             }
             if (!res.headersSent) {
