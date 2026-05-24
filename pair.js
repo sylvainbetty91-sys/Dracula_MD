@@ -766,17 +766,17 @@ case 'menu': {
     
     let menuText = `
 ╭━━━━━━━━━━━━━━━━━≽
-┃ ⟬✦⟭ 𝙱𝙾𝚃 𝙸𝙽𝙵𝙾 ⟬✦⟭
+┃      𝕭𝚘𝚝 𝐈𝚗𝚏𝚘 
 ╰━━━━━━━━━━━━━━━━━≽
-┃ ⤷ 𝙱𝙾𝚃        ✧ ${userCfg.BOT_NAME}
-┃ ⤷ 𝚄𝚂𝙴𝚁       ✧ @${sender.split("@")[0]}
-┃ ⤷ 𝙿𝚁𝙴𝙵𝙸𝚇     ✧ ${userCfg.PREFIX}
-┃ ⤷ 𝙼𝙴𝙼𝙾𝚁𝚈     ✧ ${usedMemory}MB / ${totalMemory}MB
-┃ ⤷ 𝙳𝙴𝚅        ✧ ${userCfg.OWNER_NAME}
+┃ ⤷  𝕭𝚘𝚝 : ${userCfg.BOT_NAME}
+┃ ⤷  𝐔𝚜𝚎𝚛   : @${sender.split("@")[0]}
+┃ ⤷  𝕻𝚛𝚎𝚏𝚒𝚡  : ${userCfg.PREFIX}
+┃ ⤷  𝐌𝚎𝚖𝚘𝚛𝚢   : ${usedMemory}MB / ${totalMemory}MB
+┃ ⤷  𝕯𝚎𝚟 : ${userCfg.OWNER_NAME}
 ╰━━━━━━━━━━━━━━━━━≽
-┃ ⟬✦⟭ 𝚂𝙴𝙻𝙴𝙲𝚃 𝙰 𝙲𝙰𝚃𝙴𝙶𝙾𝚁𝚈 ⟬✦⟭
-╰━━━━━━━━━━━━━━━━━≽
-┃⤷ 𝚙𝚘𝚠𝚎𝚛𝚎𝚍 ✧ ${userCfg.BOT_FOOTER}
+
+╭━━━━━━━━━━━━━━━━━≽
+> ◈ ᴘ𝚘𝚠𝚎𝚛𝚎𝚍 : ${userCfg.BOT_FOOTER}       
 ╰━━━━━━━━━━━━━━━━━≽
 `;
     // Common message context
@@ -921,17 +921,17 @@ newsletterName: userCfg.BOT_NAME,
     const totalMemory = Math.round(os.totalmem() / 1024 / 1024);
     let fallbackMenuText = `
 ╭━━━━━━━━━━━━━━━━━≽
-┃ ⟬✦⟭ 𝙱𝙾𝚃 𝙸𝙽𝙵𝙾 ⟬✦⟭
+┃      𝕭𝚘𝚝 𝐈𝚗𝚏𝚘 
 ╰━━━━━━━━━━━━━━━━━≽
-┃ ⤷ 𝙱𝙾𝚃        ✧ ${userCfg.BOT_NAME}
-┃ ⤷ 𝚄𝚂𝙴𝚁       ✧ @${sender.split("@")[0]}
-┃ ⤷ 𝙿𝚁𝙴𝙵𝙸𝚇     ✧ ${userCfg.PREFIX}
-┃ ⤷ 𝙼𝙴𝙼𝙾𝚁𝚈     ✧ ${usedMemory}MB / ${totalMemory}MB
-┃ ⤷ 𝙳𝙴𝚅        ✧ ${userCfg.OWNER_NAME}
+┃ ⤷  𝕭𝚘𝚝 : ${userCfg.BOT_NAME}
+┃ ⤷  𝐔𝚜𝚎𝚛   : @${sender.split("@")[0]}
+┃ ⤷  𝕻𝚛𝚎𝚏𝚒𝚡  : ${userCfg.PREFIX}
+┃ ⤷  𝐌𝚎𝚖𝚘𝚛𝚢   : ${usedMemory}MB / ${totalMemory}MB
+┃ ⤷  𝕯𝚎𝚟 : ${userCfg.OWNER_NAME}
 ╰━━━━━━━━━━━━━━━━━≽
-┃ ⟬✦⟭ 𝚂𝙴𝙻𝙴𝙲𝚃 𝙰 𝙲𝙰𝚃𝙴𝙶𝙾𝚁𝚈 ⟬✦⟭
-╰━━━━━━━━━━━━━━━━━≽
-┃⤷ 𝚙𝚘𝚠𝚎𝚛𝚎𝚍 ✧ ${userCfg.BOT_FOOTER}
+
+╭━━━━━━━━━━━━━━━━━≽
+> ◈ ᴘ𝚘𝚠𝚎𝚛𝚎𝚍 : ${userCfg.BOT_FOOTER}       
 ╰━━━━━━━━━━━━━━━━━≽
 `;
 
@@ -959,31 +959,30 @@ newsletterName: userCfg.BOT_NAME,
 
     let allMenuText = `
 ╭━━━━━━━━━━━━━━━━━≽
-┃ ⟬✦⟭ 𝙱𝙾𝚃 𝙸𝙽𝙵𝙾 ⟬✦⟭
+┃              𝕭𝚘𝚝 𝐈𝚗𝚏𝚘 
 ╰━━━━━━━━━━━━━━━━━≽
-┃ ⤷ 𝙱𝙾𝚃        ✧ ${userCfg.BOT_NAME}
-┃ ⤷ 𝚄𝚂𝙴𝚁       ✧ @${sender.split("@")[0]}
-┃ ⤷ 𝙿𝚁𝙴𝙵𝙸𝚇     ✧ ${userCfg.PREFIX}
-┃ ⤷ 𝙼𝙴𝙼𝙾𝚁𝚈     ✧ ${usedMemory}MB / ${totalMemory}MB
-┃ ⤷ 𝙳𝙴𝚅        ✧ ${userCfg.OWNER_NAME}
+┃ ⤷  𝕭𝚘𝚝 : ${userCfg.BOT_NAME}
+┃ ⤷  𝐔𝚜𝚎𝚛   : @${sender.split("@")[0]}
+┃ ⤷  𝕻𝚛𝚎𝚏𝚒𝚡  : ${userCfg.PREFIX}
+┃ ⤷  𝐌𝚎𝚖𝚘𝚛𝚢   : ${usedMemory}MB / ${totalMemory}MB
+┃ ⤷  𝕯𝚎𝚟 : ${userCfg.OWNER_NAME}
 ╰━━━━━━━━━━━━━━━━━≽
 
-╭━━━━━━━━━━━━━━━━━≽
-┃ ⟬✦⟭ 🌐 𝙶𝙴𝙽𝙴𝚁𝙰𝙻 ⟬✦⟭
+
+
+╭━━⟬✦⟭ 🌐 𝙶𝙴𝙽𝙴𝚁𝙰𝙻 ⟬✦⟭
 ╰━━━━━━━━━━━━━━━━━≽
 ┃ ⤷ ᴍᴇɴᴜ
 ┃ ⤷ ᴀʟʟᴍᴇɴᴜ
 ┃ ⤷ ᴘɪɴɢ
 ┃ ⤷ ғᴄ
 ┃ ⤷ ᴀʟɪᴠᴇ
-┃ ⤷ ᴏᴡɴᴇʀ
-┃ ⤷ ʙᴏᴛ_sᴛᴀᴛs
-┃ ⤷ ʙᴏᴛ_ɪɴғᴏ
-┃ ⤷ ʀᴇᴘᴏ
-┃ ⤷ ғᴀɴᴄʏ
-┃ ⤷ ʟᴏɢᴏ
-┃ ⤷ ᴄᴏᴅᴇ
-┃ ⤷ ǫʀ
+┃ ⤷ ᴄɴ
+┃ ⤷ ɪɴғᴏsᴛᴀʀᴛ
+┃ ⤷ ᴀᴅᴅᴅᴇᴛᴀɪʟsᴛᴀʀᴛ
+┃ ⤷ ᴅᴇᴛᴀɪʟsᴛᴀʀᴛ
+┃ ⤷ ᴀᴅᴅɪɴғᴏsᴛᴀʀᴛ
+┃ ⤷ ᴡᴀᴘᴀɪʀ
 ╰━━━━━━━━━━━━━━━━━≽
 
 ╭━━━━━━━━━━━━━━━━━≽
@@ -994,18 +993,13 @@ newsletterName: userCfg.BOT_NAME,
 ┃ ⤷ ᴛɪᴋᴛᴏᴋ
 ┃ ⤷ ғʙ
 ┃ ⤷ ɪɢ
-┃ ⤷ ᴀɪɪᴍɢ
 ┃ ⤷ ᴠɪᴇᴡᴏɴᴄᴇ
-┃ ⤷ ᴛᴛs
-┃ ⤷ sᴛɪᴄᴋᴇʀ
-┃ ⤷ ᴜʀʟ
-┃ ⤷ ᴛᴏᴜʀʟ2
-┃ ⤷ ᴀᴘᴋ
-╰━━━━━━━━━━━━━━━━━≽
 
-╭━━━━━━━━━━━━━━━━━≽
+
+
+╭━━━━━━━━━━━━━━━━━≽ 
 ┃ ⟬✦⟭ 👥 𝙶𝚁𝙾𝚄𝙿 ⟬✦⟭
-╰━━━━━━━━━━━━━━━━━≽
+╰━━━━━━━━━━━━━━━━≽
 ┃ ⤷ ᴀᴅᴅ
 ┃ ⤷ ᴋɪᴄᴋ
 ┃ ⤷ ᴋɪᴄᴋᴀʟʟ
@@ -1013,7 +1007,7 @@ newsletterName: userCfg.BOT_NAME,
 ┃ ⤷ ᴄʟᴏsᴇ
 ┃ ⤷ ᴘʀᴏᴍᴏᴛᴇ
 ┃ ⤷ ᴅᴇᴍᴏᴛᴇ
-┃ ⤷ ᴛᴀɢᴀʟʟ
+┃ ⤷ ᴛᴀɢᴀʟʟ 
 ┃ ⤷ ᴡᴀʀɴ
 ┃ ⤷ sᴇᴛɴᴀᴍᴇ
 ┃ ⤷ ɪɴᴠɪᴛᴇ
