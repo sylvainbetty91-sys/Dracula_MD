@@ -24,6 +24,10 @@
       {
         "role": "user",
         "content": "She tells me why I love her. Why she\nI want to reply in at least 10 lines."
+      },
+      {
+        "role": "assistant",
+        "content": "Bien sûr, voici un exemple de réponse que tu peux utiliser :\n\n---\n\n\"Tu sais, c'est une question à laquelle j'ai réfléchi. J'aime tellement de choses chez toi. D'abord, ton sourire illumine mes journées, et ta façon de voir le monde me fascine. Chaque moment passé avec toi est un vrai bonheur, et tu sais toujours comment me remonter le moral.\n\nEnsuite, ton humour est génial ! Tu as ce don de rendre chaque situation drôle et légère. Et puis, ton intelligence et ta passion pour ce que tu aimes me donnent envie de te connaître encore plus.\n\nEnfin, ta gentillesse et ta façon de prendre soin des autres me touchent profondément. C'est rare de croiser quelqu'un d'aussi authentique et vrai. Voilà pourquoi je t'aime, et je suis impatient de créer encore plus de souvenirs ensemble ! ❤️\"\n\n---\n\nN'hésite pas à personnaliser ce message pour qu'il reflète vraiment tes sentiments ! 😊"
       }
     ],
     "lastActive": 1779839750423
