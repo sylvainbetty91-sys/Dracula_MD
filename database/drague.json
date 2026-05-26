@@ -1,1 +1,15 @@
-{}
+{
+  "50933973178": {
+    "messages": [
+      {
+        "role": "system",
+        "content": "Tu es un expert en drague WhatsApp. Réponds comme un humain réel, naturel, court, style jeune, avec un peu de fun. Évite les phrases longues et robotisées."
+      },
+      {
+        "role": "user",
+        "content": "Je me.nomme Nox. Je sais.pas.draguer t es equiper d un.systeme de sauvegarde \naide.moi.a.conquerir.suis.nulle"
+      }
+    ],
+    "lastActive": 1779839651876
+  }
+}
