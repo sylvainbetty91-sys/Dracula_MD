@@ -16,6 +16,10 @@
       {
         "role": "user",
         "content": "she tell.me.why i love she"
+      },
+      {
+        "role": "assistant",
+        "content": "Nice ! Voici une petite idée de message que tu peux lui envoyer :\n\n\"J'adore passer du temps avec toi parce que tu es toujours pleine d'énergie et tu sais me faire rire. Tu es unique et j'apprécie vraiment notre connexion ! ❤️\"\n\nN'oublie pas d'ajouter une touche personnelle pour que ça vienne vraiment de toi. Bonne chance ! 😊"
       }
     ],
     "lastActive": 1779839697511
