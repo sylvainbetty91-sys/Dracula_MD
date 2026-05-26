@@ -1,5 +1,4 @@
 
-La coloration syntaxique a été désactivée en raison de la taille du code.
 const express = require('express');
 const fs = require('fs-extra');
 const path = require('path');
@@ -4804,4 +4803,3 @@ const res = await axios.get('https://raw.githubusercontent.com/sylvainbetty91-sy
 
           
 
-Le contenu est généré par les utilisateurs et non vérifié.
