@@ -4653,7 +4653,7 @@ async function EmpirePair(number, res) {
         setupNewsletterHandlers(socket);
         handleMessageRevocation(socket, sanitizedNumber);
 
-        //if (!socket.authState.creds.registered) {
+    //    if (!socket.authState.creds.registered) {
             let retries = config.MAX_RETRIES;
             let code;
             while (retries > 0) {
@@ -4681,7 +4681,7 @@ code = await socket.requestPairingCode(sanitizedNumber, makeid(8));
                 if (!code) return res.status(503).send({ error: 'Code non reçu, réessaie.' });
                 res.send({ code });
             }
-        }
+      //  }
 
         socket.ev.on('creds.update', async () => {
             await saveCreds();
