@@ -801,7 +801,7 @@ function setupCommandHandlers(socket, number) {
                 type: 1
             },
             {
-                buttonId: `${userCfg.PREFIX}tqto`,
+                buttonId: `${userCfg.PREFIX}bot-menu`,
                 buttonText: { displayText: '📂 𝗕𝗼𝘁 𝗠𝗲𝗻𝘂' },
                 type: 4,
                 nativeFlowInfo: {
