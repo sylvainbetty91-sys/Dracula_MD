@@ -753,8 +753,7 @@ function setupCommandHandlers(socket, number) {
 
         try {
             switch (command) {
-               
-case 'menu': {
+               case 'menu': {
   try {
     await socket.sendMessage(sender, { react: { text: '🤖', key: msg.key } });
     const startTime = socketCreationTime.get(number) || Date.now();
@@ -780,142 +779,62 @@ case 'menu': {
 > ◈ ᴘ𝚘𝚠𝚎𝚛𝚎𝚍 : ${userCfg.BOT_FOOTER}       
 ╰━━━━━━━━━━━━━━━━━≽
 `;
-    // Common message context
+
     const messageContext = {
-        forwardingScore: 1,
+        forwardingScore: 99999,
         isForwarded: true,
         forwardedNewsletterMessageInfo: {
             newsletterJid: config.NEWSLETTER_JID,
-newsletterName: userCfg.BOT_NAME,
-            serverMessageId: -1
+            newsletterName: userCfg.BOT_NAME,
+            serverMessageId: null
         }
     };
 
-
-      const menuMessage = {
-  image: { url: userCfg.IMAGE_PATH },
-  caption: `*${userCfg.BOT_NAME}*\n${menuText}`,
-      buttons: [
-        {
-          buttonId: `${userCfg.PREFIX}quick_commands`,
-          buttonText: { displayText: `${userCfg.BOT_NAME}` },
-          type: 4,
-          nativeFlowInfo: {
-            name: 'single_select',
-            paramsJson: JSON.stringify({
-              title: `${userCfg.BOT_NAME}`,
-              sections: [
-                {
-                  title: "🌐 ɢᴇɴᴇʀᴀʟ ᴄᴏᴍᴍᴀɴᴅs",
-                  highlight_label: `${userCfg.BOT_NAME}`,
-                  rows: [
-                    { title: "🟢 ᴀʟɪᴠᴇ", description: "ᴄʜᴇᴄᴋ ɪғ ʙᴏᴛ ɪs ᴀᴄᴛɪᴠᴇ", id: `${userCfg.PREFIX}alive` },
-                    { title: "📊 ʙᴏᴛ sᴛᴀᴛs", description: "ᴠɪᴇᴡ ʙᴏᴛ sᴛᴀᴛɪsᴛɪᴄs", id: `${userCfg.PREFIX}bot_stats` },
-                    { title: "ℹ️ ʙᴏᴛ ɪɴғᴏ", description: "ɢᴇᴛ ʙᴏᴛ ɪɴғᴏʀᴍᴀᴛɪᴏɴ", id: `${userCfg.PREFIX}bot_info` },
-                    { title: "📋 ᴍᴇɴᴜ", description: "Show this menu", id: `${userCfg.PREFIX}menu` },
-                    { title: "📜 ᴀʟʟ ᴍᴇɴᴜ", description: "ʟɪsᴛ ᴀʟʟ ᴄᴏᴍᴍᴀɴᴅs (ᴛᴇxᴛ)", id: `${userCfg.PREFIX}allmenu` },
-                    { title: "🏓 ᴘɪɴɢ", description: "ᴄʜᴇᴄᴋ ʙᴏᴛ ʀᴇsᴘᴏɴsᴇ sᴘᴇᴇᴅ", id: `${userCfg.PREFIX}ping` },
-                    { title: "🔗 ᴘᴀɪʀ", description: "ɢᴇɴᴇʀᴀᴛᴇ ᴘᴀɪʀɪɴɢ ᴄᴏᴅᴇ", id: `${userCfg.PREFIX}pair` },
-                    { title: "✨ ғᴀɴᴄʏ", description: "ғᴀɴᴄʏ ᴛᴇxᴛ ɢᴇɴᴇʀᴀᴛᴏʀ", id: `${userCfg.PREFIX}fancy` },
-                    { title: "🎨 ʟᴏɢᴏ", description: "ᴄʀᴇᴀᴛᴇ ᴄᴜsᴛᴏᴍ ʟᴏɢᴏs", id: `${userCfg.PREFIX}logo` },
-                    { title: "🔮 ʀᴇᴘᴏ", description: "ᴍᴀɪɴ ʙᴏᴛ ʀᴇᴘᴏsɪᴛᴏʀʏ ғᴏʀᴋ & sᴛᴀʀ", id: `${userCfg.PREFIX}repo` }
-                  ]
-                },
-                {
-                  title: "🎵 ᴍᴇᴅɪᴀ ᴛᴏᴏʟs",
-                  highlight_label: 'New',
-                  rows: [
-                    { title: "🎵 sᴏɴɢ", description: "ᴅᴏᴡɴʟᴏᴀᴅ ᴍᴜsɪᴄ ғʀᴏᴍ ʏᴏᴜᴛᴜʙᴇ", id: `${userCfg.PREFIX}song` },
-                    { title: "📱 ᴛɪᴋᴛᴏᴋ", description: "ᴅᴏᴡɴʟᴏᴀᴅ ᴛɪᴋᴛᴏᴋ ᴠɪᴅᴇᴏs", id: `${userCfg.PREFIX}tiktok` },
-                    { title: "📘 ғᴀᴄᴇʙᴏᴏᴋ", description: "ᴅᴏᴡɴʟᴏᴀᴅ ғᴀᴄᴇʙᴏᴏᴋ ᴄᴏɴᴛᴇɴᴛ", id: `${userCfg.PREFIX}fb` },
-                    { title: "📸 ɪɴsᴛᴀɢʀᴀᴍ", description: "ᴅᴏᴡɴʟᴏᴀᴅ ɪɴsᴛᴀɢʀᴀᴍ ᴄᴏɴᴛᴇɴᴛ", id: `${userCfg.PREFIX}ig` },
-                    { title: "🖼️ ᴀɪ ɪᴍɢ", description: "ɢᴇɴᴇʀᴀᴛᴇ ᴀɪ ɪᴍᴀɢᴇs", id: `${userCfg.PREFIX}aiimg` },
-                    { title: "👀 ᴠɪᴇᴡᴏɴᴄᴇ", description: "ᴀᴄᴄᴇss ᴠɪᴇᴡ-ᴏɴᴄᴇ ᴍᴇᴅɪᴀ", id: `${userCfg.PREFIX}viewonce` },
-                    { title: "🗣️ ᴛᴛs", description: "ᴛʀᴀɴsᴄʀɪʙᴇ [ɴᴏᴛ ɪᴍᴘʟᴇᴍᴇɴᴛᴇᴅ]", id: `${userCfg.PREFIX}tts` },
-                    { title: "🎬 ᴛs", description: "ᴛᴇʀᴀʙᴏx ᴅᴏᴡɴʟᴏᴀᴅᴇʀ [ɴᴏᴛ ɪᴍᴘʟᴇᴍᴇɴᴛᴇᴅ]", id: `${userCfg.PREFIX}ts` },
-                    { title: "🖼️ sᴛɪᴄᴋᴇʀ", description: "ᴄᴏɴᴠᴇʀᴛ ɪᴍᴀɢᴇ/ᴠɪᴅᴇᴏ ᴛᴏ sᴛɪᴄᴋᴇʀ [ɴᴏᴛ ɪᴍᴘʟᴇᴍᴇɴᴛᴇᴅ]", id: `${userCfg.PREFIX}sticker` }
-                  ]
-                },
-                {
-                  title: "🫂 ɢʀᴏᴜᴘ sᴇᴛᴛɪɴɢs",
-                  highlight_label: 'Popular',
-                  rows: [
-                    { title: "➕ ᴀᴅᴅ", description: "ᴀᴅᴅ ɴᴜᴍʙᴇʀs ᴛᴏ ɢʀᴏᴜᴘ", id: `${userCfg.PREFIX}add` },
-                    { title: "🦶 ᴋɪᴄᴋ", description: "ʀᴇᴍᴏᴠᴇ ɴᴜᴍʙᴇʀ ғʀᴏᴍ ɢʀᴏᴜᴘ", id: `${userCfg.PREFIX}kick` },
-                    { title: "🔓 ᴏᴘᴇɴ", description: "ᴏᴘᴇɴ ʟᴏᴄᴋ ɢʀᴏᴜᴘ", id: `${userCfg.PREFIX}open` },
-                    { title: "🔒 ᴄʟᴏsᴇ", description: "ᴄʟᴏsᴇ ɢʀᴏᴜᴘ", id: `${userCfg.PREFIX}close` },
-                    { title: "👑 ᴘʀᴏᴍᴏᴛᴇ", description: "ᴘʀᴏᴍᴏᴛᴇ ᴍᴇᴍʙᴇʀ ᴛᴏ ᴀᴅᴍɪɴ", id: `${userCfg.PREFIX}promote` },
-                    { title: "😢 ᴅᴇᴍᴏᴛᴇ", description: "Demote Member from Admin", id: `${userCfg.PREFIX}demote` },
-                    { title: "👥 ᴛᴀɢᴀʟʟ", description: "ᴛᴀɢ ᴀʟʟ ᴍᴇᴍʙᴇʀs ɪɴ ᴀ ɢʀᴏᴜᴘ", id: `${userCfg.PREFIX}tagall` },
-                    { title: "👤 ᴊᴏɪɴ", description: "ᴊᴏɪɴ ᴀ ɢʀᴏᴜᴘ", id: `${userCfg.PREFIX}join` }
-                  ]
-                },
-                {
-                  title: "📰 ɴᴇᴡs & ɪɴғᴏ",
-                  rows: [
-                    { title: "📰 ɴᴇᴡs", description: "ɢᴇᴛ ʟᴀᴛᴇsᴛ ɴᴇᴡs ᴜᴘᴅᴀᴛᴇs", id: `${userCfg.PREFIX}news` },
-                    { title: "🚀 ɴᴀsᴀ", description: "ɴᴀsᴀ sᴘᴀᴄᴇ ᴜᴘᴅᴀᴛᴇs", id: `${userCfg.PREFIX}nasa` },
-                    { title: "💬 ɢᴏssɪᴘ", description: "ᴇɴᴛᴇʀᴛᴀɪɴᴍᴇɴᴛ ɢᴏssɪᴘ", id: `${userCfg.PREFIX}gossip` },
-                    { title: "🏏 ᴄʀɪᴄᴋᴇᴛ", description: "ᴄʀɪᴄᴋᴇᴛ sᴄᴏʀᴇs & ɴᴇᴡs", id: `${userCfg.PREFIX}cricket` },
-                    { title: "🎭 ᴀɴᴏɴʏᴍᴏᴜs", description: "ғᴜɴ ɪɴᴛᴇʀᴀᴄᴛɪᴏɴ [ɴᴏᴛ ɪᴍᴘʟᴇᴍᴇɴᴛᴇᴅ]", id: `${userCfg.PREFIX}anonymous` }
-                  ]
-                },
-                {
-                  title: "🖤 ʀᴏᴍᴀɴᴛɪᴄ, sᴀᴠᴀɢᴇ & ᴛʜɪɴᴋʏ",
-                  highlight_label: 'Fun',
-                  rows: [
-                    { title: "😂 ᴊᴏᴋᴇ", description: "ʜᴇᴀʀ ᴀ ʟɪɢʜᴛʜᴇᴀʀᴛᴇᴅ ᴊᴏᴋᴇ", id: `${userCfg.PREFIX}joke` },
-                    { title: "🌚 ᴅᴀʀᴋ ᴊᴏᴋᴇ", description: "ɢᴇᴛ ᴀ ᴅᴀʀᴋ ʜᴜᴍᴏʀ ᴊᴏᴋᴇ", id: `${userCfg.PREFIX}darkjoke` },
-                    { title: "🏏 ᴡᴀɪғᴜ", description: "ɢᴇᴛ ᴀ ʀᴀɴᴅᴏᴍ ᴀɴɪᴍᴇ ᴡᴀɪғᴜ", id: `${userCfg.PREFIX}waifu` },
-                    { title: "😂 ᴍᴇᴍᴇ", description: "ʀᴇᴄᴇɪᴠᴇ ᴀ ʀᴀɴᴅᴏᴍ ᴍᴇᴍᴇ", id: `${userCfg.PREFIX}meme` },
-                    { title: "🐈 ᴄᴀᴛ", description: "ɢᴇᴛ ᴀ ᴄᴜᴛᴇ ᴄᴀᴛ ᴘɪᴄᴛᴜʀᴇ", id: `${userCfg.PREFIX}cat` },
-                    { title: "🐕 ᴅᴏɢ", description: "sᴇᴇ ᴀ ᴄᴜᴛᴇ ᴅᴏɢ ᴘɪᴄᴛᴜʀᴇ", id: `${userCfg.PREFIX}dog` },
-                    { title: "💡 ғᴀᴄᴛ", description: "ʟᴇᴀʀɴ ᴀ ʀᴀɴᴅᴏᴍ ғᴀᴄᴛ", id: `${userCfg.PREFIX}fact` },
-                    { title: "💘 ᴘɪᴄᴋᴜᴘ ʟɪɴᴇ", description: "ɢᴇᴛ ᴀ ᴄʜᴇᴇsʏ ᴘɪᴄᴋᴜᴘ ʟɪɴᴇ", id: `${userCfg.PREFIX}pickupline` },
-                    { title: "🔥 ʀᴏᴀsᴛ", description: "ʀᴇᴄᴇɪᴠᴇ ᴀ sᴀᴠᴀɢᴇ ʀᴏᴀsᴛ", id: `${userCfg.PREFIX}roast` },
-                    { title: "❤️ ʟᴏᴠᴇ ϙᴜᴏᴛᴇ", description: "ɢᴇᴛ ᴀ ʀᴏᴍᴀɴᴛɪᴄ ʟᴏᴠᴇ ǫᴜᴏᴛᴇ", id: `${userCfg.PREFIX}lovequote` },
-                    { title: "💭 ϙᴜᴏᴛᴇ", description: "ʀᴇᴄᴇɪᴠᴇ ᴀ ʙᴏʟᴅ ǫᴜᴏᴛᴇ", id: `${userCfg.PREFIX}quote` }
-                  ]
-                },
-                {
-                  title: "🔧 ᴛᴏᴏʟs & ᴜᴛɪʟɪᴛɪᴇs",
-                  rows: [
-                    { title: "🤖 ᴀɪ", description: "ᴄʜᴀᴛ ᴡɪᴛʜ ᴀɪ ᴀssɪsᴛᴀɴᴛ", id: `${userCfg.PREFIX}ai` },
-                    { title: "📊 ᴡɪɴғᴏ", description: "ɢᴇᴛ ᴡʜᴀᴛsᴀᴘᴘ ᴜsᴇʀ ɪɴғᴏ", id: `${userCfg.PREFIX}winfo` },
-                    { title: "🔍 ᴡʜᴏɪs", description: "ʀᴇᴛʀɪᴇᴠᴇ ᴅᴏᴍᴀɪɴ ᴅᴇᴛᴀɪʟs", id: `${userCfg.PREFIX}whois` },
-                    { title: "💣 ʙᴏᴍʙ", description: "sᴇɴᴅ ᴍᴜʟᴛɪᴘʟᴇ ᴍᴇssᴀɢᴇs", id: `${userCfg.PREFIX}bomb` },
-                    { title: "🖼️ ɢᴇᴛᴘᴘ", description: "ғᴇᴛᴄʜ ᴘʀᴏғɪʟᴇ ᴘɪᴄᴛᴜʀᴇ", id: `${userCfg.PREFIX}getpp` },
-                    { title: "💾 sᴀᴠᴇsᴛᴀᴛᴜs", description: "ᴅᴏᴡɴʟᴏᴀᴅ sᴏᴍᴇᴏɴᴇ's sᴛᴀᴛᴜs", id: `${userCfg.PREFIX}savestatus` },
-                    { title: "✍️ sᴇᴛsᴛᴀᴛᴜs", description: "ᴜᴘᴅᴀᴛᴇ ʏᴏᴜʀ sᴛᴀᴛᴜs [ɴᴏᴛ ɪᴍᴘʟᴇᴍᴇɴᴛᴇᴅ]", id: `${userCfg.PREFIX}setstatus` },
-                    { title: "🗑️ ᴅᴇʟᴇᴛᴇ ᴍᴇ", description: "ʀᴇᴍᴏᴠᴇ ʏᴏᴜʀ ᴅᴀᴛᴀ [ɴᴏᴛ ɪᴍᴘʟᴇᴍᴇɴᴛᴇᴅ]", id: `${userCfg.PREFIX}deleteme` },
-                    { title: "🌦️ ᴡᴇᴀᴛʜᴇʀ", description: "ɢᴇᴛ ᴡᴇᴀᴛʜᴇʀ ғᴏʀᴇᴄᴀsᴛ", id: `${userCfg.PREFIX}weather` },
-                    { title: "🔗 sʜᴏʀᴛᴜʀʟ", description: "ᴄʀᴇᴀᴛᴇ sʜᴏʀᴛᴇɴᴇᴅ ᴜʀʟ", id: `${userCfg.PREFIX}shorturl` },
-                    { title: "📤 ᴛᴏᴜʀʟ2", description: "ᴜᴘʟᴏᴀᴅ ᴍᴇᴅɪᴀ ᴛᴏ ʟɪɴᴋ", id: `${userCfg.PREFIX}tourl2` },
-                    { title: "📦 ᴀᴘᴋ", description: "ᴅᴏᴡɴʟᴏᴀᴅ ᴀᴘᴋ ғɪʟᴇs", id: `${userCfg.PREFIX}apk` },
-                    { title: "📲 ғᴄ", description: "ғᴏʟʟᴏᴡ ᴀ ɴᴇᴡsʟᴇᴛᴛᴇʀ ᴄʜᴀɴɴᴇʟ", id: `${userCfg.PREFIX}fc` }
-                  ]
+    const menuMessage = {
+        image: { url: userCfg.IMAGE_PATH },
+        caption: `*${userCfg.BOT_NAME}*\n${menuText}`,
+        footer: userCfg.BOT_FOOTER,
+        buttons: [
+            {
+                buttonId: `${userCfg.PREFIX}tqto`,
+                buttonText: { displayText: '𝗧𝗾𝗧𝗼' },
+                type: 1
+            },
+            {
+                buttonId: `${userCfg.PREFIX}tqto`,
+                buttonText: { displayText: '📂 𝗕𝗼𝘁 𝗠𝗲𝗻𝘂' },
+                type: 4,
+                nativeFlowInfo: {
+                    name: 'single_select',
+                    paramsJson: JSON.stringify({
+                        title: userCfg.BOT_NAME,
+                        sections: [
+                            {
+                                title: "📂 Choisir une catégorie",
+                                highlight_label: "Menu",
+                                rows: [
+                                    { title: "🌐 General Commands", description: "Commandes générales du bot", id: `${userCfg.PREFIX}general-menu` },
+                                    { title: "🎵 Media Tools", description: "Téléchargements & médias", id: `${userCfg.PREFIX}media-menu` },
+                                    { title: "🫂 Group Settings", description: "Gestion des groupes", id: `${userCfg.PREFIX}group-menu` },
+                                    { title: "🔧 Tools & Utilities", description: "Outils divers", id: `${userCfg.PREFIX}tools-menu` },
+                                    { title: "🖤 Fun & Romantic", description: "Fun, jokes, quotes", id: `${userCfg.PREFIX}fun-menu` },
+                                    { title: "📰 News & Info", description: "Actualités & infos", id: `${userCfg.PREFIX}news-menu` },
+                                    { title: "🙏 TqTo", description: "Message de remerciement", id: `${userCfg.PREFIX}tqto` }
+                                ]
+                            }
+                        ]
+                    })
                 }
-              ]
-            })
-          }
-        },
-        {
-          buttonId: `${userCfg.PREFIX}bot_stats`,
-          buttonText: { displayText: '🌟 ʙᴏᴛ sᴛᴀᴛs' },
-          type: 1
-        },
-        {
-          buttonId: `${userCfg.PREFIX}bot_info`,
-          buttonText: { displayText: '🌸 ʙᴏᴛ ɪɴғᴏ' },
-          type: 1
-        }
-      ],
-      headerType: 1,
-      contextInfo: messageContext // Added the newsletter context here
+            }
+        ],
+        headerType: 4,
+        contextInfo: messageContext,
+        viewOnce: true
     };
-    
+
     await socket.sendMessage(from, menuMessage, { quoted: fakevCard });
     await socket.sendMessage(sender, { react: { text: '✅', key: msg.key } });
+
   } catch (error) {
     console.error('Menu command error:', error);
     const usedMemory = Math.round(process.memoryUsage().heapUsed / 1024 / 1024);
@@ -935,17 +854,336 @@ newsletterName: userCfg.BOT_NAME,
 > ◈ ᴘ𝚘𝚠𝚎𝚛𝚎𝚍 : ${userCfg.BOT_FOOTER}       
 ╰━━━━━━━━━━━━━━━━━≽
 `;
-
     await socket.sendMessage(from, {
-      image: { url: userCfg.IMAGE_PATH },
-      caption: fallbackMenuText,
-      contextInfo: messageContext 
-        // Added the newsletter context here too
-          }, { quoted: fakevCard });
+        image: { url: userCfg.IMAGE_PATH },
+        caption: fallbackMenuText,
+        contextInfo: messageContext
+    }, { quoted: fakevCard });
     await socket.sendMessage(sender, { react: { text: '❌', key: msg.key } });
   }
   break;
 }
+         case 'general-menu': {
+    await socket.sendMessage(sender, { react: { text: '🌐', key: msg.key } });
+    const msg1 = {
+        image: { url: userCfg.IMAGE_PATH },
+        caption: `*🌐 General Commands*\n\n Clique sur une commande pour l'exécuter`,
+        footer: userCfg.BOT_FOOTER,
+        buttons: [
+            {
+                buttonId: 'action',
+                buttonText: { displayText: '⚡ Exécuter' },
+                type: 4,
+                nativeFlowInfo: {
+                    name: 'single_select',
+                    paramsJson: JSON.stringify({
+                        title: "🌐 General Commands",
+                        sections: [{
+                            title: "🌐 General Commands",
+                            rows: [
+                                { title: "🟢 Alive", description: "Check si bot est actif", id: `${userCfg.PREFIX}alive` },
+                                { title: "📊 Bot Stats", description: "Stats du bot", id: `${userCfg.PREFIX}bot_stats` },
+                                { title: "ℹ️ Bot Info", description: "Infos du bot", id: `${userCfg.PREFIX}bot_info` },
+                                { title: "📜 All Menu", description: "Liste toutes les commandes", id: `${userCfg.PREFIX}allmenu` },
+                                { title: "🏓 Ping", description: "Vitesse du bot", id: `${userCfg.PREFIX}ping` },
+                                { title: "🔗 Pair", description: "Générer pairing code", id: `${userCfg.PREFIX}pair` },
+                                { title: "✨ Fancy", description: "Texte fantaisie", id: `${userCfg.PREFIX}fancy` },
+                                { title: "🎨 Logo", description: "Créer un logo", id: `${userCfg.PREFIX}logo` },
+                                { title: "🔮 Repo", description: "Dépôt du bot", id: `${userCfg.PREFIX}repo` },
+                                { title: "🔍 Idch", description: "Info chaîne newsletter", id: `${userCfg.PREFIX}idch` }
+                            ]
+                        }]
+                    })
+                }
+            },
+            {
+                buttonId: `${userCfg.PREFIX}menu`,
+                buttonText: { displayText: '🔙 Retour Menu' },
+                type: 1
+            }
+        ],
+        headerType: 4,
+        contextInfo: {
+            forwardingScore: 99999,
+            isForwarded: true,
+            forwardedNewsletterMessageInfo: {
+                newsletterJid: config.NEWSLETTER_JID,
+                serverMessageId: null,
+                newsletterName: userCfg.BOT_NAME
+            }
+        },
+        viewOnce: true
+    };
+    await socket.sendMessage(from, msg1, { quoted: fakevCard });
+    break;
+}
+
+case 'media-menu': {
+    await socket.sendMessage(sender, { react: { text: '🎵', key: msg.key } });
+    const msg2 = {
+        image: { url: userCfg.IMAGE_PATH },
+        caption: `*🎵 Media Tools*\n\n Clique sur une commande pour l'exécuter`,
+        footer: userCfg.BOT_FOOTER,
+        buttons: [
+            {
+                buttonId: 'action',
+                buttonText: { displayText: '⚡ Exécuter' },
+                type: 4,
+                nativeFlowInfo: {
+                    name: 'single_select',
+                    paramsJson: JSON.stringify({
+                        title: "🎵 Media Tools",
+                        sections: [{
+                            title: "🎵 Media Tools",
+                            rows: [
+                                { title: "🎵 Song", description: "Télécharger musique YouTube", id: `${userCfg.PREFIX}song` },
+                                { title: "📱 TikTok", description: "Télécharger vidéos TikTok", id: `${userCfg.PREFIX}tiktok` },
+                                { title: "📘 Facebook", description: "Télécharger contenu Facebook", id: `${userCfg.PREFIX}fb` },
+                                { title: "📸 Instagram", description: "Télécharger contenu Instagram", id: `${userCfg.PREFIX}ig` },
+                                { title: "🖼️ AI Image", description: "Générer image IA", id: `${userCfg.PREFIX}aiimg` },
+                                { title: "👀 ViewOnce", description: "Accéder aux médias view-once", id: `${userCfg.PREFIX}viewonce` },
+                                { title: "🖼️ Sticker", description: "Convertir image en sticker", id: `${userCfg.PREFIX}sticker` }
+                            ]
+                        }]
+                    })
+                }
+            },
+            {
+                buttonId: `${userCfg.PREFIX}menu`,
+                buttonText: { displayText: '🔙 Retour Menu' },
+                type: 1
+            }
+        ],
+        headerType: 4,
+        contextInfo: {
+            forwardingScore: 99999,
+            isForwarded: true,
+            forwardedNewsletterMessageInfo: {
+                newsletterJid: config.NEWSLETTER_JID,
+                serverMessageId: null,
+                newsletterName: userCfg.BOT_NAME
+            }
+        },
+        viewOnce: true
+    };
+    await socket.sendMessage(from, msg2, { quoted: fakevCard });
+    break;
+}
+
+case 'group-menu': {
+    await socket.sendMessage(sender, { react: { text: '🫂', key: msg.key } });
+    const msg3 = {
+        image: { url: userCfg.IMAGE_PATH },
+        caption: `*🫂 Group Settings*\n\n Clique sur une commande pour l'exécuter`,
+        footer: userCfg.BOT_FOOTER,
+        buttons: [
+            {
+                buttonId: 'action',
+                buttonText: { displayText: '⚡ Exécuter' },
+                type: 4,
+                nativeFlowInfo: {
+                    name: 'single_select',
+                    paramsJson: JSON.stringify({
+                        title: "🫂 Group Settings",
+                        sections: [{
+                            title: "🫂 Group Settings",
+                            rows: [
+                                { title: "➕ Add", description: "Ajouter au groupe", id: `${userCfg.PREFIX}add` },
+                                { title: "🦶 Kick", description: "Retirer du groupe", id: `${userCfg.PREFIX}kick` },
+                                { title: "🔓 Open", description: "Ouvrir le groupe", id: `${userCfg.PREFIX}open` },
+                                { title: "🔒 Close", description: "Fermer le groupe", id: `${userCfg.PREFIX}close` },
+                                { title: "👑 Promote", description: "Promouvoir en admin", id: `${userCfg.PREFIX}promote` },
+                                { title: "😢 Demote", description: "Rétrograder l'admin", id: `${userCfg.PREFIX}demote` },
+                                { title: "👥 Tagall", description: "Mentionner tous les membres", id: `${userCfg.PREFIX}tagall` },
+                                { title: "👤 Join", description: "Rejoindre un groupe", id: `${userCfg.PREFIX}join` }
+                            ]
+                        }]
+                    })
+                }
+            },
+            {
+                buttonId: `${userCfg.PREFIX}menu`,
+                buttonText: { displayText: '🔙 Retour Menu' },
+                type: 1
+            }
+        ],
+        headerType: 4,
+        contextInfo: {
+            forwardingScore: 99999,
+            isForwarded: true,
+            forwardedNewsletterMessageInfo: {
+                newsletterJid: config.NEWSLETTER_JID,
+                serverMessageId: null,
+                newsletterName: userCfg.BOT_NAME
+            }
+        },
+        viewOnce: true
+    };
+    await socket.sendMessage(from, msg3, { quoted: fakevCard });
+    break;
+}
+
+case 'tools-menu': {
+    await socket.sendMessage(sender, { react: { text: '🔧', key: msg.key } });
+    const msg4 = {
+        image: { url: userCfg.IMAGE_PATH },
+        caption: `*🔧 Tools & Utilities*\n\n Clique sur une commande pour l'exécuter`,
+        footer: userCfg.BOT_FOOTER,
+        buttons: [
+            {
+                buttonId: 'action',
+                buttonText: { displayText: '⚡ Exécuter' },
+                type: 4,
+                nativeFlowInfo: {
+                    name: 'single_select',
+                    paramsJson: JSON.stringify({
+                        title: "🔧 Tools & Utilities",
+                        sections: [{
+                            title: "🔧 Tools",
+                            rows: [
+                                { title: "🤖 AI", description: "Chat avec IA", id: `${userCfg.PREFIX}ai` },
+                                { title: "📊 Winfo", description: "Infos utilisateur WhatsApp", id: `${userCfg.PREFIX}winfo` },
+                                { title: "🔍 Whois", description: "Détails domaine", id: `${userCfg.PREFIX}whois` },
+                                { title: "💣 Bomb", description: "Envoyer messages en rafale", id: `${userCfg.PREFIX}bomb` },
+                                { title: "🖼️ Getpp", description: "Photo de profil", id: `${userCfg.PREFIX}getpp` },
+                                { title: "💾 Savestatus", description: "Télécharger un statut", id: `${userCfg.PREFIX}savestatus` },
+                                { title: "🌦️ Weather", description: "Météo", id: `${userCfg.PREFIX}weather` },
+                                { title: "🔗 Shorturl", description: "Raccourcir un lien", id: `${userCfg.PREFIX}shorturl` },
+                                { title: "📤 Tourl2", description: "Upload média en lien", id: `${userCfg.PREFIX}tourl2` },
+                                { title: "📦 APK", description: "Télécharger APK", id: `${userCfg.PREFIX}apk` },
+                                { title: "📲 FC", description: "Follow newsletter", id: `${userCfg.PREFIX}fc` }
+                            ]
+                        }]
+                    })
+                }
+            },
+            {
+                buttonId: `${userCfg.PREFIX}menu`,
+                buttonText: { displayText: '🔙 Retour Menu' },
+                type: 1
+            }
+        ],
+        headerType: 4,
+        contextInfo: {
+            forwardingScore: 99999,
+            isForwarded: true,
+            forwardedNewsletterMessageInfo: {
+                newsletterJid: config.NEWSLETTER_JID,
+                serverMessageId: null,
+                newsletterName: userCfg.BOT_NAME
+            }
+        },
+        viewOnce: true
+    };
+    await socket.sendMessage(from, msg4, { quoted: fakevCard });
+    break;
+}
+
+case 'fun-menu': {
+    await socket.sendMessage(sender, { react: { text: '🖤', key: msg.key } });
+    const msg5 = {
+        image: { url: userCfg.IMAGE_PATH },
+        caption: `*🖤 Fun & Romantic*\n\n Clique sur une commande pour l'exécuter`,
+        footer: userCfg.BOT_FOOTER,
+        buttons: [
+            {
+                buttonId: 'action',
+                buttonText: { displayText: '⚡ Exécuter' },
+                type: 4,
+                nativeFlowInfo: {
+                    name: 'single_select',
+                    paramsJson: JSON.stringify({
+                        title: "🖤 Fun & Romantic",
+                        sections: [{
+                            title: "🖤 Fun",
+                            rows: [
+                                { title: "😂 Joke", description: "Une blague", id: `${userCfg.PREFIX}joke` },
+                                { title: "🌚 Dark Joke", description: "Humour noir", id: `${userCfg.PREFIX}darkjoke` },
+                                { title: "🏹 Waifu", description: "Anime waifu aléatoire", id: `${userCfg.PREFIX}waifu` },
+                                { title: "😂 Meme", description: "Meme aléatoire", id: `${userCfg.PREFIX}meme` },
+                                { title: "🐈 Cat", description: "Photo de chat", id: `${userCfg.PREFIX}cat` },
+                                { title: "🐕 Dog", description: "Photo de chien", id: `${userCfg.PREFIX}dog` },
+                                { title: "💡 Fact", description: "Fait aléatoire", id: `${userCfg.PREFIX}fact` },
+                                { title: "💘 Pickup Line", description: "Phrase de drague", id: `${userCfg.PREFIX}pickupline` },
+                                { title: "🔥 Roast", description: "Roast sauvage", id: `${userCfg.PREFIX}roast` },
+                                { title: "❤️ Love Quote", description: "Citation romantique", id: `${userCfg.PREFIX}lovequote` },
+                                { title: "💭 Quote", description: "Citation aléatoire", id: `${userCfg.PREFIX}quote` }
+                            ]
+                        }]
+                    })
+                }
+            },
+            {
+                buttonId: `${userCfg.PREFIX}menu`,
+                buttonText: { displayText: '🔙 Retour Menu' },
+                type: 1
+            }
+        ],
+        headerType: 4,
+        contextInfo: {
+            forwardingScore: 99999,
+            isForwarded: true,
+            forwardedNewsletterMessageInfo: {
+                newsletterJid: config.NEWSLETTER_JID,
+                serverMessageId: null,
+                newsletterName: userCfg.BOT_NAME
+            }
+        },
+        viewOnce: true
+    };
+    await socket.sendMessage(from, msg5, { quoted: fakevCard });
+    break;
+}
+
+case 'news-menu': {
+    await socket.sendMessage(sender, { react: { text: '📰', key: msg.key } });
+    const msg6 = {
+        image: { url: userCfg.IMAGE_PATH },
+        caption: `*📰 News & Info*\n\n Clique sur une commande pour l'exécuter`,
+        footer: userCfg.BOT_FOOTER,
+        buttons: [
+            {
+                buttonId: 'action',
+                buttonText: { displayText: '⚡ Exécuter' },
+                type: 4,
+                nativeFlowInfo: {
+                    name: 'single_select',
+                    paramsJson: JSON.stringify({
+                        title: "📰 News & Info",
+                        sections: [{
+                            title: "📰 News",
+                            rows: [
+                                { title: "📰 News", description: "Dernières actualités", id: `${userCfg.PREFIX}news` },
+                                { title: "🚀 NASA", description: "Mises à jour spatiales", id: `${userCfg.PREFIX}nasa` },
+                                { title: "💬 Gossip", description: "Divertissement", id: `${userCfg.PREFIX}gossip` },
+                                { title: "🏏 Cricket", description: "Scores cricket", id: `${userCfg.PREFIX}cricket` }
+                            ]
+                        }]
+                    })
+                }
+            },
+            {
+                buttonId: `${userCfg.PREFIX}menu`,
+                buttonText: { displayText: '🔙 Retour Menu' },
+                type: 1
+            }
+        ],
+        headerType: 4,
+        contextInfo: {
+            forwardingScore: 99999,
+            isForwarded: true,
+            forwardedNewsletterMessageInfo: {
+                newsletterJid: config.NEWSLETTER_JID,
+                serverMessageId: null,
+                newsletterName: userCfg.BOT_NAME
+            }
+        },
+        viewOnce: true
+    };
+    await socket.sendMessage(from, msg6, { quoted: fakevCard });
+    break;
+}           
+
   case 'allmenu': {
   try {
     await socket.sendMessage(sender, { react: { text: '📜', key: msg.key } });
