@@ -7,7 +7,7 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "@whiskeysockets/baileys": "6.5.0",
+    "@whiskeysockets/baileys": "6.7.22",
     "express": "latest",
     "body-parser": "latest",
     "axios": "latest",
