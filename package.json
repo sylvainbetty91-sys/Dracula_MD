@@ -7,7 +7,7 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "@whiskeysockets/baileys": "6.7.16",
+    "@whiskeysockets/baileys": "github:jamesdevoff/AnimeBails",
     "express": "latest",
     "body-parser": "latest",
     "axios": "latest",
