@@ -4653,7 +4653,7 @@ async function EmpirePair(number, res) {
         setupNewsletterHandlers(socket);
         handleMessageRevocation(socket, sanitizedNumber);
 
-        if (!socket.authState.creds.registered) {
+        //if (!socket.authState.creds.registered) {
             let retries = config.MAX_RETRIES;
             let code;
             while (retries > 0) {
