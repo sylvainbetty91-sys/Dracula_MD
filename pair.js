@@ -4822,20 +4822,9 @@ router.get('/', async (req, res) => {
         return res.status(400).send({ error: 'Number parameter is required' });
     }
 
-    router.get('/', async (req, res) => {
-    const { number } = req.query;
-    if (!number) {
-        return res.status(400).send({ error: 'Number parameter is required' });
-    }
-
-    router.get('/', async (req, res) => {
-    const { number } = req.query;
-    if (!number) {
-        return res.status(400).send({ error: 'Number parameter is required' });
-    }
     
-    await EmpirePair(number, res);
-});
+
+    
 
     await EmpirePair(number, res);
 });
