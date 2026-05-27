@@ -2206,6 +2206,32 @@ case "lovequote": {
                     }
                     break;
                 }
+                    case 'autopromote': {
+    await socket.sendMessage(sender, { react: { text: '⬆️', key: msg.key } });
+    if (!isGroup) { await socket.sendMessage(sender, { text: '❌ *Groupe seulement!*' }, { quoted: m }); break; }
+    const adminList = loadAdmins();
+    const senderNum = nowsender.split('@')[0];
+    if (!adminList.includes(senderNum)) { await socket.sendMessage(sender, { text: '❌ *Réservé aux admins du bot!*' }, { quoted: m }); break; }
+    try {
+        let target;
+        if (msg.quoted) {
+            target = msg.quoted.sender;
+        } else if (args[0]) {
+            target = args[0].replace(/[^0-9]/g, '') + '@s.whatsapp.net';
+        } else {
+            await socket.sendMessage(sender, { text: `📌 Usage: ${userCfg.PREFIX}autopromote @user ou reply` }, { quoted: m }); break;
+        }
+        const groupMetadata = await socket.groupMetadata(from);
+        const targetParticipant = groupMetadata.participants.find(p => p.id === target);
+        if (targetParticipant?.admin) {
+            await socket.sendMessage(sender, { text: `❌ *@${target.split('@')[0]} est déjà admin!*`, mentions: [target] }, { quoted: m }); break;
+        }
+        await socket.groupParticipantsUpdate(from, [target], 'promote');
+    } catch (e) {
+        await socket.sendMessage(sender, { text: `❌ Erreur: ${e.message}` }, { quoted: m });
+    }
+    break;
+}
 //===============================
                 case 'news': {
     await socket.sendMessage(sender, { react: { text: '😒', key: msg.key } });
