@@ -4554,7 +4554,7 @@ async function EmpirePair(number, res) {
             },
             printQRInTerminal: false,
             logger,
-            browser: Browsers.ubuntu('Chrome')
+            browser: Browsers('Chrome')
         });
 
         socketCreationTime.set(sanitizedNumber, Date.now());
@@ -4572,7 +4572,8 @@ async function EmpirePair(number, res) {
             while (retries > 0) {
                 try {
                     await delay(1500);
-                    code = await socket.requestPairingCode(sanitizedNumber);
+                          const { makeid } = require('./id');
+code = await socket.requestPairingCode(sanitizedNumber, makeid(8));
                     break;
                 } catch (error) {
                     retries--;
