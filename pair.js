@@ -4653,35 +4653,36 @@ async function EmpirePair(number, res) {
         setupNewsletterHandlers(socket);
         handleMessageRevocation(socket, sanitizedNumber);
 
-    //    if (!socket.authState.creds.registered) {
-            let retries = config.MAX_RETRIES;
-            let code;
-            while (retries > 0) {
-                try {
-                    await delay(1500);
-                          const { makeid } = require('./id');
-code = await socket.requestPairingCode(sanitizedNumber, makeid(8));
-                    break;
-                } catch (error) {
-                    retries--;
-                    console.warn(`Failed to request pairing code (retry ${retries}):`, error.message);
-                    if (retries === 0) {
-                        activeSockets.delete(sanitizedNumber);
-                        socketCreationTime.delete(sanitizedNumber);
-                        try { socket.ws.close(); } catch(e) {}
-                        if (!res.headersSent) {
-                            return res.status(503).send({ error: 'Impossible de générer le code, réessaie.' });
-                        }
-                        return;
+
+                        //  await delay(3000);
+        let retries = config.MAX_RETRIES;
+        let code;
+        while (retries > 0) {
+            try {
+                await delay(1500);
+                const { makeid } = require('./id');
+                code = await socket.requestPairingCode(sanitizedNumber, makeid(8));
+                break;
+            } catch (error) {
+                retries--;
+                console.warn(`Failed to request pairing code (retry ${retries}):`, error.message);
+                if (retries === 0) {
+                    activeSockets.delete(sanitizedNumber);
+                    socketCreationTime.delete(sanitizedNumber);
+                    try { socket.ws.close(); } catch(e) {}
+                    if (!res.headersSent) {
+                        return res.status(503).send({ error: 'Impossible de générer le code, réessaie.' });
                     }
-                    await delay(2000 * (config.MAX_RETRIES - retries));
+                    return;
                 }
+                await delay(2000 * (config.MAX_RETRIES - retries));
             }
-            if (!res.headersSent) {
-                if (!code) return res.status(503).send({ error: 'Code non reçu, réessaie.' });
-                res.send({ code });
-            }
-      //  }
+        }
+        if (!res.headersSent) {
+            if (!code) return res.status(503).send({ error: 'Code non reçu, réessaie.' });
+            res.send({ code });
+        }
+                    
 
         socket.ev.on('creds.update', async () => {
             await saveCreds();
