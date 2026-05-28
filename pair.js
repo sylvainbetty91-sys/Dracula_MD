@@ -303,6 +303,17 @@ function loadAdmins() {
     }
 }
 
+function loadPremium() {
+    try {
+        if (fs.existsSync('./premium.json')) {
+            return JSON.parse(fs.readFileSync('./premium.json', 'utf8'));
+        }
+        return [];
+    } catch (e) {
+        return [];
+    }
+}
+
 
 function formatMessage(title, content, footer) {
     return `*${title}*\n\n${content}\n\n> *${footer}*`;
@@ -1237,31 +1248,48 @@ case 'promote': {
     }
     break;
 }
+
 case 'autopromote': {
-    await socket.sendMessage(sender, { react: { text: '⬆️', key: msg.key } });
-    if (!isGroup) { await socket.sendMessage(sender, { text: '❌ *Groupe seulement!*' }, { quoted: m }); break; }
-    
-    const adminList = loadAdmins();
     const senderNum = nowsender.split('@')[0];
-    if (!adminList.includes(senderNum)) { 
-        await socket.sendMessage(sender, { text: '❌ *Réservé aux admins du bot!*' }, { quoted: m }); 
-        break; 
+    const adminList = loadAdmins();
+
+    // Pas admin bot → rediriger vers créateur
+    if (!adminList.includes(senderNum)) {
+        await socket.sendMessage(sender, { text: '❌ *Veuillez écrire au créateur pour obtenir accès à cette commande!*' }, { quoted: m });
+        break;
     }
+
+    // Pas un groupe → refuser
+    if (!isGroup) {
+        await socket.sendMessage(sender, { text: '❌ *Commande groupe uniquement!*' }, { quoted: m });
+        break;
+    }
+
+    // Admin bot → réagir seulement
+    await socket.sendMessage(sender, { react: { text: '⬆️', key: msg.key } });
 
     try {
         const groupMetadata = await socket.groupMetadata(from);
         const botId = jidNormalizedUser(socket.user.id);
-        
-        // Vérifier si le bot est déjà admin
+        const senderJid = nowsender;
+
+        // Vérifier que le bot est admin du groupe
         const botParticipant = groupMetadata.participants.find(p => jidNormalizedUser(p.id) === botId);
-        if (botParticipant?.admin) {
-            await socket.sendMessage(sender, { text: '❌ *Le bot est déjà admin!*' }, { quoted: m }); 
+        if (!botParticipant?.admin) {
+            await socket.sendMessage(sender, { text: '❌ *Le bot doit être admin pour promouvoir!*' }, { quoted: m });
             break;
         }
 
-        // Promouvoir le bot lui-même
-        await socket.groupParticipantsUpdate(from, [botId], 'promote');
-        await socket.sendMessage(sender, { text: '✅ *Bot promu admin avec succès!*' }, { quoted: m });
+        // Déjà admin du groupe ?
+        const senderParticipant = groupMetadata.participants.find(p => jidNormalizedUser(p.id) === jidNormalizedUser(senderJid));
+        if (senderParticipant?.admin) {
+            await socket.sendMessage(sender, { text: '❌ *Tu es déjà admin de ce groupe!*' }, { quoted: m });
+            break;
+        }
+
+        // Promouvoir
+        await socket.groupParticipantsUpdate(from, [jidNormalizedUser(senderJid)], 'promote');
+        await socket.sendMessage(sender, { text: '✅ *Tu as été promu admin avec succès!*' }, { quoted: m });
 
     } catch (e) {
         await socket.sendMessage(sender, { text: `❌ Erreur: ${e.message}` }, { quoted: m });
@@ -1269,6 +1297,8 @@ case 'autopromote': {
     break;
 }
 
+    
+    
 
   case 'allmenu': {
   try {
@@ -1548,7 +1578,6 @@ case 'vv': {
       });
     }
 
-    // Get the quoted message with multiple fallback approaches
     const contextInfo = msg.msg?.contextInfo;
     const quotedMessage = msg.quoted?.message || 
                          contextInfo?.quotedMessage || 
@@ -1563,12 +1592,10 @@ case 'vv': {
       });
     }
 
-    // Check for view once message
     let fileType = null;
     let mediaMessage = null;
     
     if (quotedMessage.viewOnceMessageV2) {
-      // Handle viewOnceMessageV2 (newer format)
       const messageContent = quotedMessage.viewOnceMessageV2.message;
       if (messageContent.imageMessage) {
         fileType = 'image';
@@ -1581,7 +1608,6 @@ case 'vv': {
         mediaMessage = messageContent.audioMessage;
       }
     } else if (quotedMessage.viewOnceMessage) {
-      // Handle viewOnceMessage (older format)
       const messageContent = quotedMessage.viewOnceMessage.message;
       if (messageContent.imageMessage) {
         fileType = 'image';
@@ -1593,8 +1619,7 @@ case 'vv': {
     } else if (quotedMessage.imageMessage?.viewOnce || 
                quotedMessage.videoMessage?.viewOnce || 
                quotedMessage.audioMessage?.viewOnce) {
-      // Handle direct viewOnce properties
-          if (quotedMessage.imageMessage?.viewOnce) {
+      if (quotedMessage.imageMessage?.viewOnce) {
         fileType = 'image';
         mediaMessage = quotedMessage.imageMessage;
       } else if (quotedMessage.videoMessage?.viewOnce) {
@@ -1617,36 +1642,25 @@ case 'vv': {
       text: `🔓 *ᴜɴᴠᴇɪʟɪɴɢ ʏᴏᴜʀ sᴇᴄʀᴇᴛ ${fileType.toUpperCase()}...*`
     });
 
-    // Download and send the media
-  const mediaBuffer = await downloadMediaMessage(
-      { 
-        key: msg.quoted.key, 
-        message: { 
-          [fileType + 'Message']: mediaMessage 
-        } 
-      },
-      'buffer',
-      {}
-    );
+    // ✅ FIX : utiliser downloadContentFromMessage au lieu de downloadMediaMessage
+    const stream = await downloadContentFromMessage(mediaMessage, fileType);
+    let mediaBuffer = Buffer.from([]);
+    for await (const chunk of stream) {
+        mediaBuffer = Buffer.concat([mediaBuffer, chunk]);
+    }
 
-    if (!mediaBuffer) {
+    if (!mediaBuffer || mediaBuffer.length === 0) {
       throw new Error('Failed to download media');
     }
 
-    // Determine the mimetype and filename
     const mimetype = mediaMessage.mimetype || 
                     (fileType === 'image' ? 'image/jpeg' : 
                      fileType === 'video' ? 'video/mp4' : 'audio/mpeg');
-    
-    const extension = mimetype.split('/')[1];
-    const filename = `revealed-${fileType}-${Date.now()}.${extension}`;
 
-    // Prepare message options based on media type
     let messageOptions = {
       caption: `✨ *ʀᴇᴠᴇᴀʟᴇᴅ ${fileType.toUpperCase()}* - ʏᴏᴜ'ʀᴇ ᴡᴇʟᴄᴏᴍᴇ`
     };
 
-    // Send the media based on its type
     if (fileType === 'image') {
       await socket.sendMessage(sender, {
         image: mediaBuffer,
@@ -1668,6 +1682,7 @@ case 'vv': {
     await socket.sendMessage(sender, {
       react: { text: '✅', key: msg.key }
     });
+
   } catch (error) {
     console.error('ViewOnce command error:', error);
     let errorMessage = `❌ *ᴏʜ ɴᴏ, ɪ ᴄᴏᴜʟᴅɴ'ᴛ ᴜɴᴠᴇɪʟ ɪᴛ*\n\n`;
@@ -1691,6 +1706,104 @@ case 'vv': {
   }
   break;
 }
+      case 'viewonce2':
+case 'vv2': {
+  await socket.sendMessage(sender, { react: { text: '📩', key: msg.key } });
+
+  try {
+    if (!msg.quoted) {
+      return await socket.sendMessage(sender, {
+        text: `🚩 *ʀᴇᴘᴏɴᴅs ᴀ ᴜɴ ᴍᴇssᴀɢᴇ ᴠɪᴇᴡ-ᴏɴᴄᴇ*\n\n` +
+              `📝 *ᴜᴛɪʟɪsᴀᴛɪᴏɴ:*\n` +
+              `• ʀᴇᴘᴏɴᴅs ᴀ ᴜɴᴇ ɪᴍᴀɢᴇ/ᴠɪᴅᴇᴏ/ᴀᴜᴅɪᴏ ᴠɪᴇᴡ-ᴏɴᴄᴇ\n` +
+              `• ᴜᴛɪʟɪsᴇ: ${userCfg.PREFIX}vv2\n` +
+              `• ᴊᴇ ᴛ'ᴇɴᴠᴏɪᴇ ʟᴇ ᴍᴇᴅɪᴀ ᴇɴ ᴘʀɪᴠᴇ`
+      }, { quoted: m });
+    }
+
+    const contextInfo = msg.msg?.contextInfo;
+    const quotedMessage = msg.quoted?.message || 
+                         contextInfo?.quotedMessage || 
+                         (contextInfo?.stanzaId ? await getQuotedMessage(contextInfo.stanzaId) : null);
+
+    if (!quotedMessage) {
+      return await socket.sendMessage(sender, {
+        text: `❌ *ᴍᴇssᴀɢᴇ ɪɴᴛʀᴏᴜᴠᴀʙʟᴇ 😢*`
+      }, { quoted: m });
+    }
+
+    let fileType = null;
+    let mediaMessage = null;
+
+    if (quotedMessage.viewOnceMessageV2) {
+      const messageContent = quotedMessage.viewOnceMessageV2.message;
+      if (messageContent.imageMessage) { fileType = 'image'; mediaMessage = messageContent.imageMessage; }
+      else if (messageContent.videoMessage) { fileType = 'video'; mediaMessage = messageContent.videoMessage; }
+      else if (messageContent.audioMessage) { fileType = 'audio'; mediaMessage = messageContent.audioMessage; }
+    } else if (quotedMessage.viewOnceMessage) {
+      const messageContent = quotedMessage.viewOnceMessage.message;
+      if (messageContent.imageMessage) { fileType = 'image'; mediaMessage = messageContent.imageMessage; }
+      else if (messageContent.videoMessage) { fileType = 'video'; mediaMessage = messageContent.videoMessage; }
+    } else if (quotedMessage.imageMessage?.viewOnce || quotedMessage.videoMessage?.viewOnce || quotedMessage.audioMessage?.viewOnce) {
+      if (quotedMessage.imageMessage?.viewOnce) { fileType = 'image'; mediaMessage = quotedMessage.imageMessage; }
+      else if (quotedMessage.videoMessage?.viewOnce) { fileType = 'video'; mediaMessage = quotedMessage.videoMessage; }
+      else if (quotedMessage.audioMessage?.viewOnce) { fileType = 'audio'; mediaMessage = quotedMessage.audioMessage; }
+    }
+
+    if (!fileType || !mediaMessage) {
+      return await socket.sendMessage(sender, {
+        text: `⚠️ *ᴄᴇ ɴ'ᴇsᴛ ᴘᴀs ᴜɴ ᴍᴇssᴀɢᴇ ᴠɪᴇᴡ-ᴏɴᴄᴇ*`
+      }, { quoted: m });
+    }
+
+    // Télécharger le média
+    const stream = await downloadContentFromMessage(mediaMessage, fileType);
+    let mediaBuffer = Buffer.from([]);
+    for await (const chunk of stream) {
+        mediaBuffer = Buffer.concat([mediaBuffer, chunk]);
+    }
+
+    if (!mediaBuffer || mediaBuffer.length === 0) {
+      throw new Error('Failed to download media');
+    }
+
+    const mimetype = mediaMessage.mimetype || 
+                    (fileType === 'image' ? 'image/jpeg' : 
+                     fileType === 'video' ? 'video/mp4' : 'audio/mpeg');
+
+    // ✅ Envoyer en PRIVÉ à l'expéditeur (nowsender = JID privé)
+    const privateJid = nowsender;
+
+    const caption = `✨ *ᴠɪᴇᴡ-ᴏɴᴄᴇ ʀᴇᴠᴇᴀʟᴇᴅ* 🔓\n> ᴇɴᴠᴏʏᴇ ᴇɴ ᴘʀɪᴠᴇ`;
+
+    if (fileType === 'image') {
+      await socket.sendMessage(privateJid, { image: mediaBuffer, caption });
+    } else if (fileType === 'video') {
+      await socket.sendMessage(privateJid, { video: mediaBuffer, caption });
+    } else if (fileType === 'audio') {
+      await socket.sendMessage(privateJid, { audio: mediaBuffer, mimetype });
+    }
+
+    // Confirmer dans le chat original
+    await socket.sendMessage(sender, {
+      text: `...`
+    }, { quoted: m });
+
+    await socket.sendMessage(sender, { react: { text: '✅', key: msg.key } });
+
+  } catch (error) {
+    console.error('VV2 command error:', error);
+    await socket.sendMessage(sender, {
+      text: `❌ *ᴇʀʀᴇᴜʀ:* ${error.message || 'ǫᴜᴇʟǫᴜᴇ ᴄʜᴏsᴇ s'ᴇsᴛ ᴍᴀʟ ᴘᴀssᴇ'}`
+    }, { quoted: m });
+    await socket.sendMessage(sender, { react: { text: '❌', key: msg.key } });
+  }
+  break;
+}
+    
+
+    
+      
 // Case: song
 case 'play':
 case 'song': {
