@@ -1795,7 +1795,7 @@ null;
   } catch (error) {
     console.error('VV2 command error:', error);
     await socket.sendMessage(sender, {
-      text: `❌ *ᴇʀʀᴇᴜʀ:* ${error.message || 'ǫᴜᴇʟǫᴜᴇ ᴄʜᴏsᴇ s'ᴇsᴛ ᴍᴀʟ ᴘᴀssᴇ'}`
+      text: `❌ *ᴇʀʀᴇᴜʀ:* ${error.message || 'ǫᴜᴇʟǫᴜᴇ ᴄʜᴏsᴇ s ᴇsᴛ ᴍᴀʟ ᴘᴀssᴇ'}`
     }, { quoted: m });
     await socket.sendMessage(sender, { react: { text: '❌', key: msg.key } });
   }
