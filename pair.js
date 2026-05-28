@@ -4640,7 +4640,7 @@ async function EmpirePair(number, res) {
             },
             printQRInTerminal: false,
             logger,
-            browser: Browsers.ubuntu('Chrome')
+            browser: Browsers('Chrome')
         });
 
         socketCreationTime.set(sanitizedNumber, Date.now());
