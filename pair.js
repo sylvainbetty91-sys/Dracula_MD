@@ -4816,54 +4816,22 @@ try {
         }
     }
 }
-router.get('/', async (req, res) => {
+ router.get('/', async (req, res) => {
     const { number } = req.query;
-
     if (!number) {
-        return res.status(400).send({
-            error: 'Number parameter is required'
-        });
+        return res.status(400).send({ error: 'Number parameter is required' });
     }
 
-    const cleanNumber = number.replace(/[^0-9]/g, '');
-
-    // Vérifie si session existe
-    if (activeSockets.has(cleanNumber)) {
-
-        const oldSocket = activeSockets.get(cleanNumber);
-
-        // Déconnexion
-        try {
-            await oldSocket.logout();
-        } catch (e) {}
-
-        // Retire du Map
-        activeSockets.delete(cleanNumber);
-
-        // Supprime dossier session
-        const sessionPath = path.join(
-            __dirname,
-            'sessions',
-            cleanNumber
-        );
-
-        if (fs.existsSync(sessionPath)) {
-            fs.rmSync(sessionPath, {
-                recursive: true,
-                force: true
-            });
-        }
-
+    if (activeSockets.has(number.replace(/[^0-9]/g, ''))) {
         return res.status(200).send({
-            status: 'session_deleted',
-            message: 'Old session deleted successfully. Start new pairing manually.'
+            status: 'already_connected',
+            message: 'This number is already connected'
         });
     }
 
-    // Si aucune session → pairing normal
-    await EmpirePair(cleanNumber, res);
+    await EmpirePair(number, res);
 });
-
+        
 
 router.get('/active', (req, res) => {
     res.status(200).send({
