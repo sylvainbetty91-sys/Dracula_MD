@@ -1299,11 +1299,23 @@ case 'autopromote': {
 }
 
     
-    
-
-  case 'allmenu': {
+    case 'allmenu': {
+  await socket.sendMessage(sender, { react: { text: '📜', key: msg.key } });
   try {
-    await socket.sendMessage(sender, { react: { text: '📜', key: msg.key } });
+    const {
+      generateWAMessageFromContent,
+      prepareWAMessageMedia,
+      proto,
+    } = require('@whiskeysockets/baileys');
+
+    const makeImgField = async (url) => {
+      try {
+        const resp = await axios.get(url, { responseType: 'arraybuffer' });
+        const buf = Buffer.from(resp.data);
+        return await prepareWAMessageMedia({ image: buf }, { upload: socket.waUploadToServer });
+      } catch { return {}; }
+    };
+
     const startTime = socketCreationTime.get(number) || Date.now();
     const uptime = Math.floor((Date.now() - startTime) / 1000);
     const hours = Math.floor(uptime / 3600);
@@ -1311,139 +1323,429 @@ case 'autopromote': {
     const seconds = Math.floor(uptime % 60);
     const usedMemory = Math.round(process.memoryUsage().heapUsed / 1024 / 1024);
     const totalMemory = Math.round(os.totalmem() / 1024 / 1024);
-    
 
-    let allMenuText = `
-╭━━━━━━━━━━━━━━━━━≽
-┃              𝕭𝚘𝚝 𝐈𝚗𝚏𝚘 
-╰━━━━━━━━━━━━━━━━━≽
-┃ ⤷  𝕭𝚘𝚝 : ${userCfg.BOT_NAME}
-┃ ⤷  𝐔𝚜𝚎𝚛   : @${sender.split("@")[0]}
-┃ ⤷  𝕻𝚛𝚎𝚏𝚒𝚡  : ${userCfg.PREFIX}
-┃ ⤷  𝐌𝚎𝚖𝚘𝚛𝚢   : ${usedMemory}MB / ${totalMemory}MB
-┃ ⤷  𝕯𝚎𝚟 : ${userCfg.OWNER_NAME}
-╰━━━━━━━━━━━━━━━━━≽
+    const CHAN = userCfg.CHANNEL_LINK;
+    const OWNER_WA = `https://wa.me/${userCfg.OWNER_NUMBER}`;
 
+    const cardDefs = [
+      {
+        img: userCfg.IMAGE_PATH,
+        title: `🤖 ${userCfg.BOT_NAME}`,
+        body: [
+          `• 𝐔𝚜𝚎𝚛 : @${sender.split('@')[0]}`,
+          `• 𝕻𝚛𝚎𝚏𝚒𝚡 : ${userCfg.PREFIX}`,
+          `• 𝐌𝚎𝚖𝚘𝚛𝚢 : ${usedMemory}MB / ${totalMemory}MB`,
+          `• 𝚄𝚙𝚝𝚒𝚖𝚎 : ${hours}h ${minutes}m ${seconds}s`,
+          `• 𝕯𝚎𝚟 : ${userCfg.OWNER_NAME}`,
+        ].join('\n'),
+        buttons: [
+          { display_text: '📢 Chaîne', url: CHAN },
+          { display_text: '👑 Owner', url: OWNER_WA },
+        ],
+      },
+      {
+        img: userCfg.IMAGE_PATH,
+        title: '🌐 GENERAL',
+        body: [
+          '⤷ ᴍᴇɴᴜ',
+          '⤷ ᴀʟʟᴍᴇɴᴜ',
+          '⤷ ᴘɪɴɢ',
+          '⤷ ғᴄ',
+          '⤷ ᴀʟɪᴠᴇ',
+          '⤷ ᴄɴ',
+          '⤷ ɪɴғᴏsᴛᴀʀᴛ',
+          '⤷ ᴀᴅᴅᴅᴇᴛᴀɪʟsᴛᴀʀᴛ',
+          '⤷ ᴅᴇᴛᴀɪʟsᴛᴀʀᴛ',
+          '⤷ ᴀᴅᴅɪɴғᴏsᴛᴀʀᴛ',
+          '⤷ ᴡᴀᴘᴀɪʀ',
+        ].join('\n'),
+        buttons: [
+          { display_text: '📢 Chaîne', url: CHAN },
+          { display_text: '👑 Owner', url: OWNER_WA },
+        ],
+      },
+      {
+        img: userCfg.IMAGE_PATH,
+        title: '📥 DOWNLOAD',
+        body: [
+          '⤷ sᴏɴɢ',
+          '⤷ ᴘʟᴀʏ',
+          '⤷ ᴛɪᴋᴛᴏᴋ',
+          '⤷ ғʙ',
+          '⤷ ɪɢ',
+          '⤷ ᴠɪᴇᴡᴏɴᴄᴇ',
+        ].join('\n'),
+        buttons: [
+          { display_text: '📢 Chaîne', url: CHAN },
+          { display_text: '👑 Owner', url: OWNER_WA },
+        ],
+      },
+      {
+        img: userCfg.IMAGE_PATH,
+        title: '👥 GROUP',
+        body: [
+          '⤷ ᴀᴅᴅ',
+          '⤷ ᴋɪᴄᴋ',
+          '⤷ ᴋɪᴄᴋᴀʟʟ',
+          '⤷ ᴏᴘᴇɴ',
+          '⤷ ᴄʟᴏsᴇ',
+          '⤷ ᴘʀᴏᴍᴏᴛᴇ',
+          '⤷ ᴅᴇᴍᴏᴛᴇ',
+          '⤷ ᴛᴀɢᴀʟʟ',
+          '⤷ ᴡᴀʀɴ',
+          '⤷ sᴇᴛɴᴀᴍᴇ',
+          '⤷ ɪɴᴠɪᴛᴇ',
+          '⤷ ᴊᴏɪɴ',
+          '⤷ ʙʀᴏᴀᴅᴄᴀsᴛ',
+        ].join('\n'),
+        buttons: [
+          { display_text: '📢 Chaîne', url: CHAN },
+          { display_text: '👑 Owner', url: OWNER_WA },
+        ],
+      },
+      {
+        img: userCfg.IMAGE_PATH,
+        title: '🎭 FUN',
+        body: [
+          '⤷ ᴊᴏᴋᴇ',
+          '⤷ ᴅᴀʀᴋᴊᴏᴋᴇ',
+          '⤷ ᴡᴀɪғᴜ',
+          '⤷ ᴍᴇᴍᴇ',
+          '⤷ ᴄᴀᴛ',
+          '⤷ ᴅᴏɢ',
+          '⤷ ғᴀᴄᴛ',
+          '⤷ ᴘɪᴄᴋᴜᴘʟɪɴᴇ',
+          '⤷ ʀᴏᴀsᴛ',
+          '⤷ ʟᴏᴠᴇǫᴜᴏᴛᴇ',
+          '⤷ ǫᴜᴏᴛᴇ',
+        ].join('\n'),
+        buttons: [
+          { display_text: '📢 Chaîne', url: CHAN },
+          { display_text: '👑 Owner', url: OWNER_WA },
+        ],
+      },
+      {
+        img: userCfg.IMAGE_PATH,
+        title: '⚡ MAIN',
+        body: [
+          '⤷ ᴀɪ',
+          '⤷ ᴡɪɴғᴏ',
+          '⤷ ᴡʜᴏɪs',
+          '⤷ ʙᴏᴍʙ',
+          '⤷ ɢᴇᴛᴘᴘ',
+          '⤷ sᴀᴠᴇsᴛᴀᴛᴜs',
+          '⤷ sᴇᴛsᴛᴀᴛᴜs',
+          '⤷ ᴅᴇʟᴇᴛᴇᴍᴇ',
+          '⤷ ᴡᴇᴀᴛʜᴇʀ',
+          '⤷ sʜᴏʀᴛᴜʀʟ',
+          '⤷ ɴᴀsᴀ',
+          '⤷ ɴᴇᴡs',
+          '⤷ ᴄʀɪᴄᴋᴇᴛ',
+          '⤷ ɢᴏssɪᴘ',
+          '⤷ ᴀᴄᴛɪᴠᴇ',
+        ].join('\n'),
+        buttons: [
+          { display_text: '📢 Chaîne', url: CHAN },
+          { display_text: '👑 Owner', url: OWNER_WA },
+        ],
+      },
+      {
+        img: userCfg.IMAGE_PATH,
+        title: '⚙️ CONFIG',
+        body: [
+          '⤷ sᴇᴛʙᴏᴛɴᴀᴍᴇ',
+          '⤷ sᴇᴛᴏᴡɴᴇʀɴᴀᴍᴇ',
+          '⤷ sᴇᴛᴏᴡɴᴇʀɴᴜᴍʙᴇʀ',
+          '⤷ sᴇᴛʟɪɴᴋᴄʜᴀɴɴᴇʟ',
+          '⤷ sᴇᴛʟɪɴᴋɢʀᴏᴜᴘ',
+          '⤷ sᴇᴛʙᴏᴛᴘᴘ',
+          '⤷ sᴇᴛᴘʀᴇғɪx',
+          '⤷ sᴇᴛғᴏᴏᴛᴇʀ',
+          '⤷ ᴀᴜᴛᴏᴠɪᴇᴡ',
+          '⤷ ᴀᴜᴛᴏʟɪᴋᴇ',
+          '⤷ ᴀᴜᴛᴏʀᴇᴄ',
+          '⤷ ᴍʏsᴇᴛᴛɪɴɢs',
+          '⤷ ᴅᴇʟᴍᴏᴅɪғɪᴄᴀᴛɪᴏɴs',
+          '⤷ ᴡᴀᴘᴀɪʀ',
+        ].join('\n'),
+        buttons: [
+          { display_text: '📢 Chaîne', url: CHAN },
+          { display_text: '👑 Owner', url: OWNER_WA },
+        ],
+      },
+    ];
 
+    const imgFields = await Promise.all(cardDefs.map(cd => makeImgField(cd.img)));
 
-╭━━⟬✦⟭ 🌐 𝙶𝙴𝙽𝙴𝚁𝙰𝙻 ⟬✦⟭
-╰━━━━━━━━━━━━━━━━━≽
-┃ ⤷ ᴍᴇɴᴜ
-┃ ⤷ ᴀʟʟᴍᴇɴᴜ
-┃ ⤷ ᴘɪɴɢ
-┃ ⤷ ғᴄ
-┃ ⤷ ᴀʟɪᴠᴇ
-┃ ⤷ ᴄɴ
-┃ ⤷ ɪɴғᴏsᴛᴀʀᴛ
-┃ ⤷ ᴀᴅᴅᴅᴇᴛᴀɪʟsᴛᴀʀᴛ
-┃ ⤷ ᴅᴇᴛᴀɪʟsᴛᴀʀᴛ
-┃ ⤷ ᴀᴅᴅɪɴғᴏsᴛᴀʀᴛ
-┃ ⤷ ᴡᴀᴘᴀɪʀ
-╰━━━━━━━━━━━━━━━━━≽
+    const cards = cardDefs.map((cd, i) => ({
+      header: proto.Message.InteractiveMessage.Header.fromObject({
+        title: cd.title,
+        hasMediaAttachment: !!imgFields[i]?.imageMessage,
+        ...(imgFields[i] || {}),
+      }),
+      body: proto.Message.InteractiveMessage.Body.fromObject({ text: cd.body }),
+      nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.fromObject({
+        buttons: cd.buttons.map(b => ({
+          name: 'cta_url',
+          buttonParamsJson: JSON.stringify({ display_text: b.display_text, url: b.url, merchant_url: b.url }),
+        })),
+      }),
+    }));
 
-╭━━━━━━━━━━━━━━━━━≽
-┃ ⟬✦⟭ 📥 𝙳𝙾𝚆𝙽𝙻𝙾𝙰𝙳 ⟬✦⟭
-╰━━━━━━━━━━━━━━━━━≽
-┃ ⤷ sᴏɴɢ
-┃ ⤷ ᴘʟᴀʏ
-┃ ⤷ ᴛɪᴋᴛᴏᴋ
-┃ ⤷ ғʙ
-┃ ⤷ ɪɢ
-┃ ⤷ ᴠɪᴇᴡᴏɴᴄᴇ
-
-
-
-╭━━━━━━━━━━━━━━━━━≽ 
-┃ ⟬✦⟭ 👥 𝙶𝚁𝙾𝚄𝙿 ⟬✦⟭
-╰━━━━━━━━━━━━━━━━≽
-┃ ⤷ ᴀᴅᴅ
-┃ ⤷ ᴋɪᴄᴋ
-┃ ⤷ ᴋɪᴄᴋᴀʟʟ
-┃ ⤷ ᴏᴘᴇɴ
-┃ ⤷ ᴄʟᴏsᴇ
-┃ ⤷ ᴘʀᴏᴍᴏᴛᴇ
-┃ ⤷ ᴅᴇᴍᴏᴛᴇ
-┃ ⤷ ᴛᴀɢᴀʟʟ 
-┃ ⤷ ᴡᴀʀɴ
-┃ ⤷ sᴇᴛɴᴀᴍᴇ
-┃ ⤷ ɪɴᴠɪᴛᴇ
-┃ ⤷ ᴊᴏɪɴ
-┃ ⤷ ʙʀᴏᴀᴅᴄᴀsᴛ
-╰━━━━━━━━━━━━━━━━━≽
-
-╭━━━━━━━━━━━━━━━━━≽
-┃ ⟬✦⟭ 🎭 𝙵𝚄𝙽 ⟬✦⟭
-╰━━━━━━━━━━━━━━━━━≽
-┃ ⤷ ᴊᴏᴋᴇ
-┃ ⤷ ᴅᴀʀᴋᴊᴏᴋᴇ
-┃ ⤷ ᴡᴀɪғᴜ
-┃ ⤷ ᴍᴇᴍᴇ
-┃ ⤷ ᴄᴀᴛ
-┃ ⤷ ᴅᴏɢ
-┃ ⤷ ғᴀᴄᴛ
-┃ ⤷ ᴘɪᴄᴋᴜᴘʟɪɴᴇ
-┃ ⤷ ʀᴏᴀsᴛ
-┃ ⤷ ʟᴏᴠᴇǫᴜᴏᴛᴇ
-┃ ⤷ ǫᴜᴏᴛᴇ
-╰━━━━━━━━━━━━━━━━━≽
-
-╭━━━━━━━━━━━━━━━━━≽
-┃ ⟬✦⟭ ⚡ 𝙼𝙰𝙸𝙽 ⟬✦⟭
-╰━━━━━━━━━━━━━━━━━≽
-┃ ⤷ ᴀɪ
-┃ ⤷ ᴡɪɴғᴏ
-┃ ⤷ ᴡʜᴏɪs
-┃ ⤷ ʙᴏᴍʙ
-┃ ⤷ ɢᴇᴛᴘᴘ
-┃ ⤷ sᴀᴠᴇsᴛᴀᴛᴜs
-┃ ⤷ sᴇᴛsᴛᴀᴛᴜs
-┃ ⤷ ᴅᴇʟᴇᴛᴇᴍᴇ
-┃ ⤷ ᴡᴇᴀᴛʜᴇʀ
-┃ ⤷ sʜᴏʀᴛᴜʀʟ
-┃ ⤷ ɴᴀsᴀ
-┃ ⤷ ɴᴇᴡs
-┃ ⤷ ᴄʀɪᴄᴋᴇᴛ
-┃ ⤷ ɢᴏssɪᴘ
-┃ ⤷ ᴀᴄᴛɪᴠᴇ
-┃ ⤷ ᴡʜᴏɪs
-╰━━━━━━━━━━━━━━━━━≽
-
-╭━━━━━━━━━━━━━━━━━≽
-┃ ⟬✦⟭ ⚙️ 𝙲𝙾𝙽𝙵𝙸𝙶 ⟬✦⟭
-╰━━━━━━━━━━━━━━━━━≽
-┃ ⤷ sᴇᴛʙᴏᴛɴᴀᴍᴇ
-┃ ⤷ sᴇᴛᴏᴡɴᴇʀɴᴀᴍᴇ
-┃ ⤷ sᴇᴛᴏᴡɴᴇʀɴᴜᴍʙᴇʀ
-┃ ⤷ sᴇᴛʟɪɴᴋᴄʜᴀɴɴᴇʟ
-┃ ⤷ sᴇᴛʟɪɴᴋɢʀᴏᴜᴘ
-┃ ⤷ sᴇᴛʙᴏᴛᴘᴘ
-┃ ⤷ sᴇᴛᴘʀᴇғɪx
-┃ ⤷ sᴇᴛғᴏᴏᴛᴇʀ
-┃ ⤷ ᴀᴜᴛᴏᴠɪᴇᴡ
-┃ ⤷ ᴀᴜᴛᴏʟɪᴋᴇ
-┃ ⤷ ᴀᴜᴛᴏʀᴇᴄ
-┃ ⤷ ᴍʏsᴇᴛᴛɪɴɢs
-┃ ⤷ ᴅᴇʟᴍᴏᴅɪғɪᴄᴀᴛɪᴏɴs
-┃ ⤷ ᴡᴀᴘᴀɪʀ
-╰━━━━━━━━━━━━━━━━━≽
-
-┃⤷ 𝚙𝚘𝚠𝚎𝚛𝚎𝚍 ✧ ${userCfg.BOT_FOOTER}
-╰━━━━━━━━━━━━━━━━━≽
-`;
-    await socket.sendMessage(from, {
-      image: { url: userCfg.IMAGE_PATH },
-      caption: allMenuText
+    const menuMsg = await generateWAMessageFromContent(sender, {
+      ephemeralMessage: {
+        message: {
+          messageContextInfo: { deviceListMetadata: {}, deviceListMetadataVersion: 2 },
+          interactiveMessage: proto.Message.InteractiveMessage.fromObject({
+            body: proto.Message.InteractiveMessage.Body.fromObject({ text: `*${userCfg.BOT_NAME} — All Commands*` }),
+            footer: proto.Message.InteractiveMessage.Footer.fromObject({ text: `© ${userCfg.OWNER_NAME} • ${userCfg.BOT_FOOTER}` }),
+            header: proto.Message.InteractiveMessage.Header.fromObject({ title: '', hasMediaAttachment: false }),
+            contextInfo: {},
+            carouselMessage: proto.Message.InteractiveMessage.CarouselMessage.fromObject({ cards }),
+          }),
+        },
+      },
     }, { quoted: fakevCard });
+
+    await socket.relayMessage(sender, menuMsg.message, { messageId: menuMsg.key.id });
     await socket.sendMessage(sender, { react: { text: '✅', key: msg.key } });
+
   } catch (error) {
     console.error('Allmenu command error:', error);
     await socket.sendMessage(from, {
-      text: `❌* ᴛʜᴇ ᴍᴇɴᴜ ɢᴏᴛ sʜʏ! 😢*\nError: ${error.message || 'Unknown error'}\nTry again, love?`
+      text: `❌ *ᴛʜᴇ ᴍᴇɴᴜ ɢᴏᴛ sʜʏ! 😢*\nError: ${error.message || 'Unknown error'}\nTry again?`
     }, { quoted: fakevCard });
     await socket.sendMessage(sender, { react: { text: '❌', key: msg.key } });
   }
   break;
 }
+
+  // ─── .primeee / .infos ────────────────────────────────────────────────
+case 'tqto':
+case 'primeee': {
+  await socket.sendMessage(sender, { react: { text: '🏷️', key: msg.key } });
+  try {
+    const {
+      generateWAMessageFromContent,
+      prepareWAMessageMedia,
+      proto,
+    } = require('@whiskeysockets/baileys');
+
+    const makeImgField = async (url) => {
+      try {
+        const resp = await axios.get(url, { responseType: 'arraybuffer' });
+        const buf = Buffer.from(resp.data);
+        return await prepareWAMessageMedia({ image: buf }, { upload: socket.waUploadToServer });
+      } catch { return {}; }
+    };
+
+    const cardDefs = [
+      {
+        img: 'https://files.catbox.moe/ozm8c1.png',
+        title: '𝐃𝚫𝐑𝐊 𝐆𝚫𝐌𝚵𝐑  𝐎𝐅𝐅𝐈𝐂𝐈𝚫𝐋',
+        body: [
+          '• HOLD PURGER',
+          '• PRP | OWNER',
+          '• DEVELOPPER',
+          '• DISCORD GAMER',
+          '• efootball player',
+          '• ANIME fan',
+          '• UoN student',
+          '• Proud Luo',
+        ].join('\n'),
+        buttons: [
+          { display_text: '📱 WhatsApp', url: 'https://wa.me/233547788811' },
+          { display_text: ' Telegram', url: 'https://t.me/dark4gamer' },
+          { display_text: ' TG Channel', url: 'https://t.me/primeee_world' },
+          { display_text: 'WA Channel', url: 'https://whatsapp.com/channel/0029Vb7xzgfCnA7lgs0u4X30' },
+        ],
+      },
+      {
+        img: 'https://files.catbox.moe/j9uqwt.png',
+        title: '𝐃𝚵𝐕𝐒 𝐏𝐑𝐈𝐌𝚵𝚵 𝐓𝚵𝐀𝐌𝐒̥̽',
+        body: [
+          '• PRIMEEE DEVS ACADEMY',
+          '• WHATSAPP/TELEGRAM BOT',
+          '• CUSTOMER BOT/WEB',
+          '• PRIVATE PANEL PTERODACTYL',
+          '• WE ARE THE UNLUMITED TECH',
+        ].join('\n'),
+        buttons: [
+          { display_text: 'BOTS GROUP', url: 'https://chat.whatsapp.com/F29k1q77NVj28Fh6ADovyN' },
+          { display_text: 'PRIMEEE WEB', url: 'https://Noxprimeee.42web.io' },
+          { display_text: 'Wa Channel', url: 'https://whatsapp.com/channel/0029VbCpwcTLtOjDtbFyTD3F' },
+          { display_text: '𝐍𝚯𝐗 𝗫𝚳𝗗', url: 'https://t.me/Primeee_Xdbot?start=_tgr_v9OkvCdjMGQ1' },
+        ],
+      },
+      {
+        img: 'https://files.catbox.moe/eensnb.png',
+        title: '『𝐌𝚰𝐍𝚰𝐍𝚯𝐗-𝐁𝚯𝐓』',
+        body: [
+          `• User: ${m.pushName || 'User'}`,
+          `• Version: ${userCfg.version || '1.0.0'}`,
+          `• Prefix: ${userCfg.PREFIX}`,
+          `• Library: Node.js`,
+          `• Commands: 183+`,
+          `• Made with ❤️ by ® ${userCfg.BOT_FOOTER || 'PRIMEEE'}`,
+        ].join('\n'),
+        buttons: [
+          { display_text: 'CONNECT BOT', url: 'https://t.me/Primeee_Xd2bot?start=_tgr_MLRQVE1mYTJk' },
+          { display_text: '📢 Follow Channel', url: 'https://whatsapp.com/channel/0029VbCpwcTLtOjDtbFyTD3F' },
+          { display_text: 'Support Group', url: 'https://t.me/primeee_world' },
+        ],
+      },
+      {
+        img: 'https://i.imghippo.com/files/BFi4775wA.jpg',
+        title: '*𝐍𝚯𝐗 𝐇𝚯𝐒𝐓𝐈𝐍𝐆 ☁️*',
+        body: [
+          '• Fᴏᴜɴᴅᴇʀ | 𝐌ꝛ⥔𝐍𝚯𝐗⥕𝚯𝐅𝐅𝚰𝐂𝐈𝚫𝐋',
+          '• FREEPANNEL HOSTING',
+          '• HIGHT-PERFORMENCE PUBLIC PANEL',
+          '• JOIN OURS AND ENJOY',
+        ].join('\n'),
+        buttons: [
+          { display_text: 'NFP BOT', url: 'https://t.me/NoxFreepanelbot?start=ref_7083149358' },
+          { display_text: 'NFP WEB', url: 'https://freeserverprimeee.vercel.app' },
+          { display_text: 'Whatsapp channel', url: 'https://whatsapp.com/channel/0029VbBgPkE545urxX1Far0b' },
+        ],
+      },
+      {
+        img: 'https://i.imghippo.com/files/jX6330PQ.jpg',
+        title: '𝐌ꝛ 𝐍𝚯𝐗 𝚸𝚪𝚰𝚳𝚵𝚵𝚵 𝚯𝐅𝐅𝚰𝐂𝐈𝚫𝐋',
+        body: [
+          '• NOX HOSTING ☁️ | founder',
+          '• PRIMEEE TECH | owner',
+          '• BOT/WEB developer',
+          '• JavaScript coder',
+          '• JUST A CHILL BOY 💳',
+        ].join('\n'),
+        buttons: [
+          { display_text: 'CONTACT', url: 'https://t.me/BANXPRIMEEE' },
+          { display_text: 'CHANNEL', url: 'https://whatsapp.com/channel/0029VbBgPkE545urxX1Far0b' },
+          { display_text: ' WhatsApp CONTACT', url: 'https://wa.me/message/CNWNQP6S4XT7J1' },
+          { display_text: 'GITHUB', url: 'https://www.github.com/nox4primeee' },
+        ],
+      },
+      {
+        img: 'https://files.catbox.moe/f9ukn2.png',
+        title: 'DEV DRACULA PRIMEEE',
+        body: [
+          '• Bots Developper',
+          '• Dark Crasher 2.0 bot owner',
+          '• Haitian boy',
+          '• Single',
+          '• Student',
+        ].join('\n'),
+        buttons: [
+          { display_text: '📱 WhatsApp', url: 'https://wa.me/224666649030' },
+          { display_text: '✈️ Telegram', url: 'https://t.me/Dracula509' },
+          { display_text: '📢 TG Channel', url: 'https://t.me/Draculatech' },
+          { display_text: 'WA CHANEL', url: 'https://whatsapp.com/channel/0029VbCpwcTLtOjDtbFyTD3F' },
+        ],
+      },
+      {
+        img: 'https://d.top4top.io/p_3798q36sy0.jpg',
+        title: '𝐌ꝛ 𝐊𝐈𝐑𝐀 𝚸𝚪𝚰𝚳𝚵𝚵𝚵 𝚯𝐅𝐅𝚰𝐂𝐈𝚫𝐋',
+        body: [
+          '• KIRA HOSTING ☁️ | founder',
+          '• PRIMEEE TECH | owner',
+          '• BOT/WEB developer',
+          '• FATHER OF DEVS',
+          '• JUST A CHILL BOY 💳',
+        ].join('\n'),
+        buttons: [
+          { display_text: 'CONTACT', url: 'https://t.me/Loydvan' },
+          { display_text: 'CHANNEL', url: 'https://whatsapp.com/channel/0029VaiuYH87z4kYfUcLPe14' },
+          { display_text: ' WhatsApp CONTACT', url: 'https://wa.me/message/L3752HTRQ3YPI1' },
+          { display_text: '✈️ TG-CONTACT', url: 'https://t.me/DEV_KIRA' },
+        ],
+      },
+      {
+        img: 'https://i.imghippo.com/files/sL3181gL.png',
+        title: '👑 𝐋𝐎𝐑𝐃 ᬊ𝐏𝐑𝐈𝐌𝐄 ᭄ 𝐍𝐄𝐗𝐔𝐒⃢ 𝐃𝐄𝐕 ࿐',
+        body: [
+          '• ʙᴍᴀx ɴᴇxᴜs ʙʟs ᴍᴅ 🤖 | creator',
+          '• 👑 𝐍𝐄𝐗𝐔𝐒 ᬊ𝐏𝐑𝐈𝐌𝐄 ᭄ 𝐁𝐋𝐗⃢ 𝐋𝐀𝐁𝐒 ࿐ | founder',
+          '• Front-end & Back-end developer',
+          '• WEB / MOBILE / BOT developer',
+          '• JavaScript • HTML • CSS • Python • React',
+        ].join('\n'),
+        buttons: [
+          { display_text: 'CONTACT', url: 'https://wa.me/243843705652' },
+          { display_text: 'CHANNEL', url: 'https://whatsapp.com/channel/0029Vb78ycrInlqYocbYLX0P' },
+          { display_text: ' WhatsApp CONTACT', url: 'https://wa.me/243843705652' },
+          { display_text: '✈️ TG-CONTACT', url: 'https://t.me/LORDPRIME_NEXUSDEV/' },
+        ],
+      },
+      {
+        img: 'https://i.ibb.co/gM7Bhs12/e454b3350170.jpg',
+        title: '𝐓𝐇𝐄 𝐃𝐀𝐑𝐊𝐍𝚵𝐒𝐒',
+        body: [
+          '• DARKNESS XMD 🌹 | founder',
+          '• DARKNESS TECH | owner',
+          '• BOT/WEB developer',
+          '• JavaScript coder',
+          '• Just a random dev on the net🌹',
+        ].join('\n'),
+        buttons: [
+          { display_text: 'CONTACT', url: 'https://t.me/TheFateDarkness' },
+          { display_text: 'CHANNEL', url: 'https://whatsapp.com/channel/0029VbBz3AYBPzjd5is5mJ2W' },
+          { display_text: ' WhatsApp CONTACT', url: 'https://wa.me/237671281938' },
+          { display_text: '✈️ TG-CONTACT', url: 'https://t.me/TheFateDarkness' },
+        ],
+      },
+    ];
+
+    const imgFields = await Promise.all(cardDefs.map(cd => makeImgField(cd.img)));
+
+    const cards = cardDefs.map((cd, i) => ({
+      header: proto.Message.InteractiveMessage.Header.fromObject({
+        title: cd.title,
+        hasMediaAttachment: !!imgFields[i]?.imageMessage,
+        ...(imgFields[i] || {}),
+      }),
+      body: proto.Message.InteractiveMessage.Body.fromObject({ text: cd.body }),
+      nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.fromObject({
+        buttons: cd.buttons.map(b => ({
+          name: 'cta_url',
+          buttonParamsJson: JSON.stringify({ display_text: b.display_text, url: b.url, merchant_url: b.url }),
+        })),
+      }),
+    }));
+
+    const creditMsg = await generateWAMessageFromContent(sender, {
+      ephemeralMessage: {
+        message: {
+          messageContextInfo: { deviceListMetadata: {}, deviceListMetadataVersion: 2 },
+          interactiveMessage: proto.Message.InteractiveMessage.fromObject({
+            body: proto.Message.InteractiveMessage.Body.fromObject({ text: ` *${userCfg.BOT_NAME} — Developer Credits*` }),
+            footer: proto.Message.InteractiveMessage.Footer.fromObject({ text: `© ${userCfg.OWNER_NAME} • ${userCfg.BOT_FOOTER}` }),
+            header: proto.Message.InteractiveMessage.Header.fromObject({ title: '', hasMediaAttachment: false }),
+            contextInfo: {},
+            carouselMessage: proto.Message.InteractiveMessage.CarouselMessage.fromObject({ cards }),
+          }),
+        },
+      },
+    }, { quoted: fakevCard });
+
+    await socket.relayMessage(sender, creditMsg.message, { messageId: creditMsg.key.id });
+
+  } catch (e) {
+    console.error('primeee command error:', e);
+    await socket.sendMessage(sender, {
+      text:
+        `🌟 *${userCfg.BOT_NAME} — Credits*\n\n` +
+        `👨‍💻 *𝐌ꝛ⥔𝐍𝚯𝐗⥕𝚸𝚪𝚰𝚳𝚵𝚵𝚵𝚵 𝚯𝐅𝐅𝚰𝐂𝐈𝚫𝐋* — JavaScript dev, UoN student, Proud Luo\n` +
+        `👨‍💻 *𝐃𝚫𝐑𝐊 𝐆𝚫𝐌𝚵𝐑 𝐎𝐅𝐅𝐈𝐂𝐈𝚫𝐋* — Proud Kikuyu\n\n` +
+        `📢 Channel: https://t.me/noxdm\n` +
+        `🔗 Pair: https://t.me/primeee_official`
+    }, { quoted: fakevCard });
+  }
+  break;
+}
+
+
+
 case 'demote': {
     await socket.sendMessage(sender, { react: { text: '⬇️', key: msg.key } });
     if (!isGroup) { await socket.sendMessage(sender, { text: '❌ *Groupe seulement!*' }, { quoted: m }); break; }
