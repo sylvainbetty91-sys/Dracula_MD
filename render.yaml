@@ -1,8 +1,8 @@
 services:
   - type: web
-    name: mini-inconnu-xd-bot
+    name: Dracula_MD
     env: node
-    buildCommand: npm install
+    buildCommand: npm install --legacy-peer-deps
     startCommand: node index.js
     envVars:
       - key: PORT
