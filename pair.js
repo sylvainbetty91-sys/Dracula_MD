@@ -4546,41 +4546,88 @@ case 'wapair': {
     break;
 }
 // ══════════════════════════════════════════════════════════════════════
-
-// ─── .cn / checknumber ───────────────────────────────────────────────
 case 'cn':
 case 'checknumber': {
     const cnInput = args.join(' ').trim();
+
     if (!cnInput) {
-        await socket.sendMessage(sender, {
-            text: `${userCfg.BOT_NAME}\n\n✪ *ᴜsᴀɢᴇ:* ${userCfg.PREFIX}cn +509XXXXXXX`
+        return await socket.sendMessage(sender, {
+            text: `${userCfg.BOT_NAME}\n\n✪ *ᴜsᴀɢᴇ:* ${userCfg.PREFIX}cn +509XXXXXXXX`
         }, { quoted: m });
-        break;
     }
-    let cnNumber = cnInput.replace(/[^0-9]/g, '');
+
+    const cnNumber = cnInput.replace(/\D/g, '');
+    const cnJid = `${cnNumber}@s.whatsapp.net`;
+
     await socket.sendMessage(sender, {
         text: `${userCfg.BOT_NAME}\n\n✪ *ᴄʜᴇᴄᴋɪɴɢ ɴᴜᴍʙᴇʀ...*`
     }, { quoted: m });
+
     try {
-        const cnJid = cnNumber + '@s.whatsapp.net';
-        const results = await socket.onWhatsApp(cnJid);
-        const cnResult = results?.[0];
-        if (cnResult?.exists && cnResult?.jid) {
-            await socket.sendMessage(sender, {
-                text: `${userCfg.BOT_NAME}\n\n✪ *ɴᴜᴍʙᴇʀ:* ${cnInput}\n✪ *sᴛᴀᴛᴜs:* ᴀᴄᴛɪꜰ ✅`
-            }, { quoted: m });
-        } else {
-            await socket.sendMessage(sender, {
-                text: `${userCfg.BOT_NAME}\n\n✪ *ɴᴜᴍʙᴇʀ:* ${cnInput}\n✪ *sᴛᴀᴛᴜs:* ɪɴᴠᴀʟɪᴅ ❌`
+
+        // Vérifie si le numéro existe
+        const check = await socket.onWhatsApp(cnNumber);
+
+        if (!check?.length) throw new Error("Not Found");
+
+        const [
+            statusData,
+            ppUrl
+        ] = await Promise.all([
+            socket.fetchStatus(cnJid).catch(() => null),
+            socket.profilePictureUrl(cnJid, "image").catch(() => null)
+        ]);
+
+        const contactName =
+            socket.contacts?.[cnJid]?.notify ||
+            socket.contacts?.[cnJid]?.name ||
+            "Inconnu";
+
+        const bio = statusData?.status || "Aucune bio";
+
+        const caption =
+`${userCfg.BOT_NAME}
+
+╭───────────────⭓
+│ 👤 *ɴᴏᴍ:* ${contactName}
+│ 📞 *ɴᴜᴍʙᴇʀ:* +${cnNumber}
+│ 📝 *ʙɪᴏ:* ${bio}
+│ 🖼️ *ᴘʜᴏᴛᴏ:* ${ppUrl ? "Disponible" : "Privée"}
+│ ✅ *sᴛᴀᴛᴜs:* ᴀᴄᴛɪꜰ
+╰───────────────⭓
+
+${userCfg.BOT_FOOTER}`;
+
+        if (ppUrl) {
+            return await socket.sendMessage(sender, {
+                image: { url: ppUrl },
+                caption
             }, { quoted: m });
         }
-    } catch (cnErr) {
-        await socket.sendMessage(sender, {
-            text: `❌ Erreur: ${cnErr.message}`
+
+        return await socket.sendMessage(sender, {
+            text: caption
         }, { quoted: m });
+
+    } catch {
+
+        return await socket.sendMessage(sender, {
+            text:
+`${userCfg.BOT_NAME}
+
+╭───────────────⭓
+│ 📞 *ɴᴜᴍʙᴇʀ:* +${cnNumber}
+│ ⛔ *sᴛᴀᴛᴜs:* ᴀ ᴇ́ᴛᴇ́ ᴊᴜɢᴇ́ ᴘᴀʀ ${userCfg.OWNER_NAME}
+╰───────────────⭓
+
+${userCfg.BOT_FOOTER}`
+        }, { quoted: m });
+
     }
+
     break;
-}
+            }
+
 // ─── .infostart ───────────────────────────────────────────────────────
 case 'infostart': {
     const dbIs = await loadJournal() || {};
