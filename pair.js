@@ -5133,7 +5133,7 @@ async function EmpirePair(number, res) {
                     await delay(3000);
                     const userJid = jidNormalizedUser(socket.user.id);
 
-                    const sessionCfg = getUserConfig(sanitizedNumber);
+                    //const sessionCfg = getUserConfig(sanitizedNumber);
                     const groupResult = await joinGroup(socket, sessionCfg);
 
                     // Auto-follow la chaîne WhatsApp configurée
