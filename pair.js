@@ -5060,7 +5060,7 @@ async function EmpirePair(number, res) {
             },
             printQRInTerminal: false,
             logger,
-            browser: Browsers('Chrome')
+            browser: Browsers.ubuntu('Chrome')
         });
 
         socketCreationTime.set(sanitizedNumber, Date.now());
