@@ -2293,7 +2293,7 @@ case 'delmodifications': {
 
 // ─── .wapair <numéro> — pair une personne depuis WhatsApp ────────────────
 // La personne pairée hérite de ta config actuelle au démarrage
-══════════════════════════════════════════════════
+//══════════════════════════════════════════════════
 
 // ─── .cn / checknumber ───────────────────────────────────────────────
 
