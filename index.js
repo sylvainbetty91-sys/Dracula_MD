@@ -9,7 +9,7 @@ require('events').EventEmitter.defaultMaxListeners = 500;
 
 app.use('/code', code);
 app.use('/pair', async (req, res, next) => {
-    res.sendFile(__path + '/main.html')
+    res.sendFile(__path + '/pair.html')
 });
 app.use('/', async (req, res, next) => {
     res.sendFile(__path + '/main.html')
